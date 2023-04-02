@@ -16,15 +16,15 @@ export default function App() {
   const [render, setRender] = useState(false);
   useEffect(() => setRender(true), []);
   return render ?
-  <ChakraProvider theme={theme}>
-    {typeof window === 'undefined' ? null : (
-      <Router>
-        <Routes>
-          <Route path="/:url" element={<PageViewer />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Router>
-    )}
-</ChakraProvider>
-   : null;
+    <ChakraProvider theme={theme}>
+      {typeof window === 'undefined' ? null : (
+        <Router>
+          <Routes>
+            <Route path="/:url" element={<PageViewer />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </Router>
+      )}
+    </ChakraProvider>
+    : null;
 }
