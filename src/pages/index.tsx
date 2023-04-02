@@ -24,12 +24,6 @@ export default function Home() {
         minHeight="100vh"
         align="center"
         justify="center"
-        style={{
-          backgroundImage: "url('./bg.png')",
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
       >
         <Container>
           <Box

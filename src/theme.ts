@@ -57,6 +57,10 @@ const theme = extendTheme({
     global: {
       body: {
         overflowX: 'hidden',
+        backgroundImage: "url('./bg.png')",
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
       },
     },
   },

@@ -95,13 +95,6 @@ export default function PageViewer() {
   return (
     <Box
       position={'relative'}
-      style={{
-        backgroundColor: '#f5f5f5',
-        backgroundImage: "url('./bg.png')",
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }}
     >
       <Box
         bg='rgba(242, 193, 133, 0.5)'>
