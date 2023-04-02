@@ -53,6 +53,13 @@ const inputTheme = () => {
 }
 
 const theme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        overflowX: 'hidden',
+      },
+    },
+  },
   colors: {
     primary: {
       100: '#CAA9A5',

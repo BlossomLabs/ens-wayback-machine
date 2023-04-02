@@ -1,6 +1,7 @@
 // components/Timeline.js
 import React, { MouseEventHandler } from 'react';
 import { Flex, Circle, Box, Tooltip } from '@chakra-ui/react';
+import useIsInView from '@/hooks/useIsInView';
 
 type TimelineItem = {
   date: Date;
@@ -15,6 +16,7 @@ type TimelineItemProps = {
 };
 
 const TimelineItem = ({ date, onClick, isActive }: TimelineItemProps) => {
+  const [ref, isInView] = useIsInView();
   const formattedDate = date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -22,9 +24,9 @@ const TimelineItem = ({ date, onClick, isActive }: TimelineItemProps) => {
   });
 
   return (
-    <Tooltip label={formattedDate} hasArrow placement={isActive ? "top": "bottom"} isOpen={isActive ? true : undefined}>
-      <Flex direction="column" alignItems="center">
-        <Circle size="16px" bg={isActive? "black" : "primary.900"} mt={2} onClick={onClick} cursor="pointer" />
+    <Tooltip label={formattedDate} hasArrow placement={isActive ? "top": "bottom"} isOpen={!isInView ? false : isActive ? true : undefined}>
+      <Flex ref={ref} direction="column" alignItems="center" onClick={onClick} cursor="pointer">
+        <Circle size="16px" mx="3" bg={isActive? "black" : "primary.900"} mt={2} />
       </Flex>
     </Tooltip>
   );
@@ -61,14 +63,17 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   const flexBasisValues = calculateFlexBasis(data);
 
   return (
-    <Box position="relative" mx={8} my={8} height="30">
-      <Box
-        position="absolute"
-        width="100%"
-        height="3px"
-        bg="primary.900"
-        top="14px"
-      />
+    <Box
+      position="relative"
+      mx={8}
+      mt={8}
+      overflowX={'scroll'}
+      backgroundImage="linear-gradient(to right, primary.900 0%, primary.900 100%)"
+      backgroundSize="100% 3px"
+      backgroundRepeat="no-repeat"
+      backgroundPosition="0 14px"
+      height="60px"
+    >
       <Flex position="absolute" justifyContent="space-between" width="100%">
         {data.map((item, index) => (
           <Flex flexBasis={flexBasisValues[index]} key={index}>
@@ -81,7 +86,6 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
           </Flex>
         ))}
       </Flex>
-
     </Box>
   );
 };
