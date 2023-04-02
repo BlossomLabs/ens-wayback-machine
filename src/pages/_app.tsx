@@ -1,14 +1,31 @@
-import type { AppProps } from 'next/app'
-import { ChakraProvider } from '@chakra-ui/react'
-
 
 import "@fontsource/caveat/400.css";
 import "@fontsource/amatic-sc/700.css";
 
 import theme from '../theme'
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <ChakraProvider theme={theme}>
-    <Component {...pageProps} />
-  </ChakraProvider>
+import { ChakraProvider } from '@chakra-ui/react'
+
+import {HashRouter as Router, Routes, Route} from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { AppProps } from "next/app";
+
+import Home from './index'
+import PageViewer from './[url]'
+
+export default function App() {
+  const [render, setRender] = useState(false);
+  useEffect(() => setRender(true), []);
+  return render ?
+  <ChakraProvider theme={theme}>
+    {typeof window === 'undefined' ? null : (
+      <Router>
+        <Routes>
+          <Route path="/:url" element={<PageViewer />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Router>
+    )}
+</ChakraProvider>
+   : null;
 }

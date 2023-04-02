@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { StaticJsonRpcProvider } from '@ethersproject/providers'
 import contentHash from 'content-hash'
 import { Box, Flex, Text, Link, Card } from "@chakra-ui/react"
+import { useParams } from "react-router-dom";
 import Timeline from "../../components/Timeline";
-import { useRouter } from "next/router";
 
 const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
 
@@ -37,12 +37,10 @@ function decode(encoded: string) {
 
 export default function PageViewer() {
 
-
-  const router = useRouter()
-  const { url } = router.query
-
   const [snapshots, setSnapshots] = useState<{hash: string, date: number}[]>([])
   const [ipfsUrl, setIpfsUrl] = useState('')
+
+  const { url } = useParams()
 
   const data = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
@@ -129,7 +127,7 @@ export default function PageViewer() {
               </Card>
             </Link>
           </Box>
-          <Box width="100%" overflow={'scroll'}>
+          <Box width="100%">
             <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={ipfsUrl} />
           </Box>
         </Flex>

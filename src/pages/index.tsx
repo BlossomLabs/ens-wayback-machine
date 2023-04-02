@@ -1,7 +1,7 @@
 import { FormEventHandler, useState } from "react";
 import { Box, Flex, Card, Link, Text, Input, InputGroup, InputLeftElement, Heading, Container } from "@chakra-ui/react"
 import { SearchIcon } from '@chakra-ui/icons'
-import { useRouter } from 'next/navigation'
+import { useNavigate } from 'react-router-dom';
 
 const featured = [
   'evmcrispr.eth',
@@ -11,12 +11,13 @@ const featured = [
 
 export default function Home() {
   const [url, setUrl] = useState('')
-  const router = useRouter()
+  const navigate = useNavigate()
 
   const handeSubmit: FormEventHandler = (event) => {
     event.preventDefault()
-    router.push(`/${url}`)
+    navigate(`/${url}`)
   }
+
   return (
     <>
       <Flex
@@ -37,14 +38,14 @@ export default function Home() {
             border={"2px solid black"}
             p={4}
           >
-            <Heading textAlign="center" fontSize={50}>
+            <Heading textAlign="center" fontSize={"50px"}>
               ENS Wayback Machine
             </Heading>
-            <Text textAlign="center" mt={4} fontSize={20}>
+            <Text textAlign="center" mt={4} fontSize={"20px"}>
               The ENS Wayback Machine allows users to go back in time and see how ENS linked dApps looked like.
             </Text>
             <form onSubmit={handeSubmit}>
-              <InputGroup mt={4} mx="auto" maxW="md">
+              <InputGroup mt={4} mx="auto" maxW="lg">
                 <InputLeftElement pointerEvents='none'>
                   <SearchIcon color='black' />
                 </InputLeftElement>
@@ -70,7 +71,7 @@ export default function Home() {
               {featured.map((item) => (
                 <Card variant={'semiTransparent'} key={item} borderWidth="1px" m={2}>
                   <Text textAlign="center" fontSize={20}>
-                    <Link href={`./${item}`}>
+                    <Link href={`/#/${item}`}>
                       {item}
                     </Link>
                   </Text>
