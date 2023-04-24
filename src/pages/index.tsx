@@ -1,7 +1,8 @@
 import { FormEventHandler, useState } from "react";
-import { Box, Flex, Card, Link, Text, Input, InputGroup, InputLeftElement, Heading, Container } from "@chakra-ui/react"
+import { Box, Flex, Card, Link, Text, Input, InputGroup, InputLeftElement, Heading, Container, HStack } from "@chakra-ui/react"
 import { SearchIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom';
+import Favicon from "@/components/Favicon";
 
 const featured = [
   'evmcrispr.eth',
@@ -63,10 +64,13 @@ export default function Home() {
           <Box>
             <Flex mt={4} justify="space-around" wrap="wrap">
               {featured.map((item) => (
-                <Card variant={'semiTransparent'} key={item} borderWidth="1px" m={2}>
+                <Card variant={'semiTransparent'} key={item} borderWidth="1px" p={2}>
                   <Text textAlign="center" fontSize={20}>
                     <Link href={`/#/${item}`}>
-                      {item}
+                      <HStack>
+                      <Favicon width="16" height="16" alt="" src={`https://${item}.limo/favicon.ico`} />
+                      <Text>{item}</Text>
+                      </HStack>
                     </Link>
                   </Text>
                 </Card>

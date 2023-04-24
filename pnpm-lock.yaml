@@ -10,6 +10,7 @@ specifiers:
   '@ethersproject/providers': ^5.7.2
   '@fontsource/amatic-sc': ^4.5.9
   '@fontsource/caveat': ^4.5.10
+  '@heroicons/react': ^2.0.17
   '@types/node': 18.15.11
   '@types/react': 18.0.31
   '@types/react-dom': 18.0.11
@@ -33,6 +34,7 @@ dependencies:
   '@ethersproject/providers': 5.7.2
   '@fontsource/amatic-sc': 4.5.9
   '@fontsource/caveat': 4.5.10
+  '@heroicons/react': 2.0.17_react@18.2.0
   '@types/node': 18.15.11
   '@types/react': 18.0.31
   '@types/react-dom': 18.0.11
@@ -1564,6 +1566,14 @@ packages:
 
   /@fontsource/caveat/4.5.10:
     resolution: {integrity: sha512-uTg0I4hBXfOzjpUQlGwdmdlcLUlwSNXlux52IwFq7TCHlyHMAHPEqP1zDyg8lWKD86L7wOyv9jmIK/Iy5erndg==}
+    dev: false
+
+  /@heroicons/react/2.0.17_react@18.2.0:
+    resolution: {integrity: sha512-90GMZktkA53YbNzHp6asVEDevUQCMtxWH+2UK2S8OpnLEu7qckTJPhNxNQG52xIR1WFTwFqtH6bt7a60ZNcLLA==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:
