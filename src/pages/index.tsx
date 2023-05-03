@@ -28,15 +28,17 @@ export default function Home() {
       >
         <Container>
           <Box
-            backgroundColor="rgba(242, 193, 133, 0.5)"
-            borderRadius="20px"
+            backgroundColor="rgba(193, 143, 101, 0.9)"
+            borderRadius="8px"
             border={"2px solid black"}
             p={4}
           >
-            <Heading textAlign="center" fontSize={"50px"}>
-              ENS Wayback Machine
-            </Heading>
-            <Text textAlign="center" mt={4} fontSize={"20px"}>
+            <Box bg="primary.500" borderRadius="5px" p={4} mt="-60px" border="3px solid black">
+              <Heading textAlign="center" fontSize={"37px"}>
+                ENS Wayback Machine
+              </Heading>
+            </Box>
+            <Text textAlign="center" mt={4} fontSize={"26px"}>
               The ENS Wayback Machine allows users to go back in time and see how ENS linked dApps looked like.
             </Text>
             <form onSubmit={handeSubmit}>
@@ -49,6 +51,7 @@ export default function Home() {
                   autoFocus
                   onChange={(event) => setUrl(event.target.value)}
                   placeholder='Enter an ENS URL'
+                  size="lg"
                   // Workaround because Chakra UI input theming doesn't support _focusVisible
                   _focusVisible={{
                     outline: 'none',
@@ -57,19 +60,20 @@ export default function Home() {
                   _hover={{
                     borderColor: 'black !important',
                   }}
+                  fontWeight="extrabold"
                 />
               </InputGroup>
             </form>
           </Box>
           <Box>
-            <Flex mt={4} justify="space-around" wrap="wrap">
+            <Flex mt={4} justify="space-around" wrap="wrap" flexDirection={['column', 'column', 'row']}>
               {featured.map((item) => (
-                <Card variant={'semiTransparent'} key={item} borderWidth="1px" p={2}>
+                <Card variant={'semiTransparent'} key={item} borderWidth="2px" p={2} mb={1}>
                   <Text textAlign="center" fontSize={20}>
                     <Link href={`/#/${item}`}>
-                      <HStack>
-                      <Favicon width="16" height="16" alt="" src={`https://${item}.limo/favicon.ico`} />
-                      <Text>{item}</Text>
+                      <HStack spacing={2}>
+                        <Favicon width="16" height="16" alt="" src={`https://${item}.limo/favicon.ico`} />
+                        <Text>{item}</Text>
                       </HStack>
                     </Link>
                   </Text>

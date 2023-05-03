@@ -1,6 +1,6 @@
 
-import "@fontsource/caveat/400.css";
-import "@fontsource/amatic-sc/700.css";
+import "@fontsource/edu-qld-beginner"
+import "@fontsource/megrim"
 
 import theme from '../theme'
 

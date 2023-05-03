@@ -10,6 +10,8 @@ specifiers:
   '@ethersproject/providers': ^5.7.2
   '@fontsource/amatic-sc': ^4.5.9
   '@fontsource/caveat': ^4.5.10
+  '@fontsource/edu-qld-beginner': ^4.5.4
+  '@fontsource/megrim': ^4.5.11
   '@heroicons/react': ^2.0.17
   '@types/node': 18.15.11
   '@types/react': 18.0.31
@@ -34,6 +36,8 @@ dependencies:
   '@ethersproject/providers': 5.7.2
   '@fontsource/amatic-sc': 4.5.9
   '@fontsource/caveat': 4.5.10
+  '@fontsource/edu-qld-beginner': 4.5.4
+  '@fontsource/megrim': 4.5.11
   '@heroicons/react': 2.0.17_react@18.2.0
   '@types/node': 18.15.11
   '@types/react': 18.0.31
@@ -1566,6 +1570,14 @@ packages:
 
   /@fontsource/caveat/4.5.10:
     resolution: {integrity: sha512-uTg0I4hBXfOzjpUQlGwdmdlcLUlwSNXlux52IwFq7TCHlyHMAHPEqP1zDyg8lWKD86L7wOyv9jmIK/Iy5erndg==}
+    dev: false
+
+  /@fontsource/edu-qld-beginner/4.5.4:
+    resolution: {integrity: sha512-CsE1KfU5UxuDbcrZcD1PKBFP74GBCF2VX37drMi89QD/WnzNuZaw9ENo0Jjy0juspiAxNU/EeI+FciXMWCLRmQ==}
+    dev: false
+
+  /@fontsource/megrim/4.5.11:
+    resolution: {integrity: sha512-Gchjz8pb/sBWUcyzOhsIRBpa1OiinPUJ1nz9HD4yYGmeVKqXd1VsyskS7HL7d/LqP7uTdaO8kykg+2wceuIsOg==}
     dev: false
 
   /@heroicons/react/2.0.17_react@18.2.0:

@@ -25,13 +25,13 @@ const Favicon = ({ src, ...props }: FaviconProps) => {
 
   return (
     <>
-    {errorCount === 2 ? <GlobeAltIcon width="16px" height="16px" /> : 
-      <Image
-        src={imageSrc}
-        onError={handleError}
-        {...props}
-      />
-    }
+      {errorCount === 2 ? <GlobeAltIcon width="16px" height="16px" /> :
+        <Image
+          src={imageSrc}
+          onError={handleError}
+          {...props}
+        />
+      }
     </>
   );
 };

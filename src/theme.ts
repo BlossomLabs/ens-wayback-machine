@@ -16,7 +16,7 @@ const cardTheme = () => {
     variants: {
       semiTransparent: definePartsStyle({
         container: {
-          bg: 'rgba(242, 193, 133, 0.5)',
+          bg: 'rgba(193, 143, 101, 0.9)',
         }
       }),
     }
@@ -28,11 +28,11 @@ const inputTheme = () => {
       createMultiStyleConfigHelpers(inputAnatomy.keys)
   return defineMultiStyleConfig({
     baseStyle: definePartsStyle({
+      element: {
+        height: '100%', // center vertically
+      },
       field: {
-        fontFamily: 'Caveat',
-        fontWeight: 'extrabold',
-        fontSize: '25px',
-        textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
+        fontFamily: 'Edu QLD Beginner',
         borderColor: 'black',
         _hover: {
           borderColor: 'black',
@@ -40,11 +40,11 @@ const inputTheme = () => {
         _placeholder: {
           color: 'black',
           opacity: 1,
-          fontFamily: 'Amatic SC',
-          fontWeight: 'extrabold',
-          fontSize: '25px',
+          fontFamily: 'Edu QLD Beginner',
         },
         _focusVisible: {
+          opacity: 1,
+          fontFamily: 'Edu QLD Beginner',
           outline: 'none',
         },
       }
@@ -89,15 +89,15 @@ const theme = extendTheme({
     },
   },
   fonts: {
-    heading: 'Amatic SC',
-    body: 'Caveat',
+    heading: 'Megrim',
+    body: 'Edu QLD Beginner',
   },
   components: {
     Box: {
       variants: {
         semiTransparent: {
-          bg: 'rgba(242, 193, 133, 0.5)',
-          borderRadius: '20px',
+          bg: 'rgba(193, 143, 101, 0.9)',
+          borderRadius: '8px',
           p: 4,
         },
       },
@@ -105,18 +105,16 @@ const theme = extendTheme({
     Card: cardTheme(),
     Heading: {
       baseStyle: {
-        fontFamily: 'Amatic SC',
+        fontFamily: 'Megrim',
         fontWeight: 'extrabold',
         textShadow:
-          '1px 1px 2px rgba(0, 0, 0, 0.5), 2px 2px 2px rgba(255, 255, 255, 1)',
+          '1px 1px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0)',
       },
     },
     Text: {
       baseStyle: {
-        fontFamily: 'Caveat',
+        fontFamily: 'Edu QLD Beginner',
         fontWeight: 'extrabold',
-        textShadow:
-          '1px 1px 2px rgba(0, 0, 0, 0.5), 2px 2px 2px rgba(255, 255, 255, 1)',
       },
     },
     Input: inputTheme(),

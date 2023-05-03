@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { StaticJsonRpcProvider } from '@ethersproject/providers'
 import contentHash from 'content-hash'
-import { Box, Flex, Text, Link, Card } from "@chakra-ui/react"
-import { useParams } from "react-router-dom";
+import { Box, Flex } from "@chakra-ui/react"
+import { Link, useParams } from "react-router-dom";
+import Image from 'next/image';
+
 import Timeline from "../../components/Timeline";
 
 const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
@@ -63,6 +65,7 @@ export default function PageViewer() {
         }`,
       { ens: url },
       (result: any) => {
+        if (result.data.domains.length === 0) throw new Error('No resolver found')
         return result.data.domains[0].resolver.id
       }
       )
@@ -97,27 +100,18 @@ export default function PageViewer() {
       position={'relative'}
     >
       <Box
-        bg='rgba(242, 193, 133, 0.5)'>
+        bg='primary.100'>
         <Flex
           px='30px'
           pt='15px'
           alignItems="center"
           direction={['column', 'column', 'row']}
         >
-          <Box mr={[0, 0, '15px']} minWidth="150px">
-            <Link href='/'
-              _hover={{
-                textDecoration: "unset",
-              }}
-            >
-              <Card textAlign="center" border="2px solid rgba(0,0,0,0.5)">
-                <Text
-                  fontSize={20}
-                  fontFamily="Amatic SC"
-                >
-                ENS Wayback Machine
-                </Text>
-              </Card>
+          <Box minWidth="120px">
+            <Link to='/'>
+              <Box mb={5}>
+                <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
+              </Box>
             </Link>
           </Box>
           <Box width="100%">
