@@ -6,6 +6,8 @@ import contentHash from 'content-hash'
 import { Box, Flex } from "@chakra-ui/react"
 import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
+import { Base58 } from '@ethersproject/basex';
+import { toUtf8String } from '@ethersproject/strings';
 
 import Timeline from "../../components/Timeline";
 
@@ -28,21 +30,30 @@ function getFromENSGraph(query: any, variables: any, path: any) {
 }
 
 function decode(encoded: string) {
-  if (!encoded.startsWith('0xe3')) {
-    // Not an IPFS link
+  if (!encoded.startsWith('0xe3') && !encoded.startsWith('0xe5')) {
+    // Not an IPFS or IPNS link
     return ''
   }
   const ipfsv0 = contentHash.decode(encoded)
+
+  if (encoded.startsWith('0xe5')) {
+    try {
+      return `https://` + toUtf8String(Base58.decode(ipfsv0).slice(2))
+    } catch (e) {
+      console.log(ipfsv0)
+      return ''
+    }
+  }
   const ipfsv1 = contentHash.helpers.cidV0ToV1Base32(ipfsv0)
-  return ipfsv1
+  return `https://${ipfsv1}.ipfs.dweb.link/`
 }
 
 export default function PageViewer() {
 
   const [snapshots, setSnapshots] = useState<{hash: string, date: number}[]>([])
-  const [ipfsUrl, setIpfsUrl] = useState('')
+  const [url, setUrl] = useState('')
 
-  const { url } = useParams()
+  const { url: _url } = useParams()
 
   const data = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
@@ -50,10 +61,10 @@ export default function PageViewer() {
   }))
 
   const handleSnapshotChange = (value: string) => {
-    setIpfsUrl(value)
+    setUrl(value)
   }
   useEffect(() => {
-    if (url) (async () => {
+    if (_url) (async () => {
       const resolverId = await getFromENSGraph(`
         query GetENSResolver($ens: String!) {
           domains(where: {name: $ens}) {
@@ -63,7 +74,7 @@ export default function PageViewer() {
             }
           }
         }`,
-      { ens: url },
+      { ens: _url },
       (result: any) => {
         if (result.data.domains.length === 0) throw new Error('No resolver found')
         return result.data.domains[0].resolver.id
@@ -91,9 +102,9 @@ export default function PageViewer() {
         })
       )
       setSnapshots(decodedWithDate)
-      setIpfsUrl(decodedWithDate[decoded.length - 1].hash)
+      setUrl(decodedWithDate[decoded.length - 1].hash)
     })()
-  }, [url])
+  }, [_url])
 
   return (
     <Box
@@ -115,10 +126,10 @@ export default function PageViewer() {
             </Link>
           </Box>
           <Box width="100%">
-            <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={ipfsUrl} />
+            <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={url} />
           </Box>
         </Flex>
-        <iframe width="100%" style={{minHeight: "100vh", border: 0}} src={ipfsUrl? `https://${ipfsUrl}.ipfs.dweb.link/`: ''} />
+        <iframe width="100%" style={{minHeight: "100vh", border: 0}} src={url? url: ''} />
       </Box>
     </Box>
   );
