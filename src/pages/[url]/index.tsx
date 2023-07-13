@@ -57,11 +57,11 @@ export default function PageViewer() {
 
   const data = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
-    value: hash
+    urlValue: hash
   }))
 
-  const handleSnapshotChange = (value: string) => {
-    setUrl(value)
+  const handleSnapshotChange = (urlValue: string) => {
+    setUrl(urlValue)
   }
   useEffect(() => {
     if (_url) (async () => {
