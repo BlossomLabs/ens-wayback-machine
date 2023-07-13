@@ -59,9 +59,12 @@ export default function PageViewer() {
     blockNumber: number;
     owner: object;
     date: Date;
+    eventType: string;
   }[]>([]);
+const [data, setData] = useState<any[]>([]);
 
-  const data = snapshots.map(({ date, hash }) => ({
+
+  const snapshotsData = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
     urlValue: hash,
     eventType: hash ? "contentUpload" : "newDomain"
@@ -70,6 +73,9 @@ export default function PageViewer() {
   const handleSnapshotChange = (urlValue: string) => {
     setUrl(urlValue);
   };
+
+
+
 
   useEffect(() => {
     if (_url) {
@@ -174,34 +180,24 @@ export default function PageViewer() {
       
             const updatedWrappedTransfers = await Promise.all(filteredWrappedTransfers.map(async obj => {
               const block = await ethereumProvider.getBlock(obj.blockNumber);
-              return { ...obj, date: new Date(block.timestamp * 1000) };
+              return { ...obj, date: new Date(block.timestamp * 1000), eventType: "wrappedTransfer" };
             }));
-      
-            setWrappedTransfers(updatedWrappedTransfers);
-            console.log(updatedWrappedTransfers);
+                      
+            setWrappedTransfers(updatedWrappedTransfers)
           })();
         }
+
+        const combined: any[] = [...snapshotsData, ...wrappedTransfers]
+
+        setData(combined)
+
       })();
 
+      console.log(data)
 
     }
   }, [_url, domainId]);
 
-  /*useEffect(() => {
-    if (wrappedTransfers.length > 0) {
-      (async () => {
-        const filteredWrappedTransfers = wrappedTransfers.filter(obj => Object.keys(obj).length > 0);
-  
-        const updatedWrappedTransfers = await Promise.all(filteredWrappedTransfers.map(async obj => {
-          const block = await ethereumProvider.getBlock(obj.blockNumber);
-          return { ...obj, date: new Date(block.timestamp * 1000) };
-        }));
-  
-        setWrappedTransfers(updatedWrappedTransfers);
-        console.log(updatedWrappedTransfers);
-      })();
-    }
-  }, [wrappedTransfers]);*/
   return (
     <Box
       position={'relative'}
