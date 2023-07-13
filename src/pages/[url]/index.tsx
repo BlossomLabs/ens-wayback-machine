@@ -40,7 +40,6 @@ function decode(encoded: string) {
     try {
       return `https://` + toUtf8String(Base58.decode(ipfsv0).slice(2))
     } catch (e) {
-      console.log(ipfsv0)
       return ''
     }
   }
@@ -49,95 +48,161 @@ function decode(encoded: string) {
 }
 
 export default function PageViewer() {
-
-  const [snapshots, setSnapshots] = useState<{hash: string, date: number}[]>([])
-  const [url, setUrl] = useState('')
-
-  const { url: _url } = useParams()
+  const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);
+  const [url, setUrl] = useState('');
+  const { url: _url } = useParams();
+  const [domainId, setDomainId] = useState('');
+  const [transfers, setTransfers] = useState([]);
+  const [wrappedTransfers, setWrappedTransfers] = useState<{
+    id: string;
+    transactionID: string;
+    blockNumber: number;
+    owner: object;
+    date: Date;
+  }[]>([]);
 
   const data = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
     urlValue: hash,
-    eventType: (hash? "contentUpload" : "newDomain")
-  }))
+    eventType: hash ? "contentUpload" : "newDomain"
+  }));
 
   const handleSnapshotChange = (urlValue: string) => {
-    setUrl(urlValue)
-  }
+    setUrl(urlValue);
+  };
+
   useEffect(() => {
-    if (_url) (async () => {
-      // Retrieve resolver
-      const resolverId = await getFromENSGraph(`
-        query GetENSResolver($ens: String!) {
-          domains(where: {name: $ens}) {
-            name
-            resolver {
-              id
+    if (_url) {
+      (async () => {
+        const resolverId = await getFromENSGraph(
+          `query GetENSResolver($ens: String!) {
+            domains(where: {name: $ens}) {
+              name
+              resolver {
+                id
+              }
             }
+          }`,
+          { ens: _url },
+          (result: any) => {
+            if (result.data.domains.length === 0) throw new Error('No resolver found');
+            return result.data.domains[0].resolver.id;
           }
-        }`,
-      { ens: _url },
-      (result: any) => {
-        if (result.data.domains.length === 0) throw new Error('No resolver found')
-        return result.data.domains[0].resolver.id
-      }
-      )
+        );
 
-      // Retrieve information to generate urls
-      const encoded = await getFromENSGraph(`
-        query GetENSContentHashes($resolverId: String!) {
-          contenthashChangeds(where: {resolver: $resolverId}) {
-            blockNumber
-            hash
-          }
-        }`,
-      { resolverId },
-      (result: any) => result.data.contenthashChangeds
-      )
-      const decoded = encoded.map(({hash, blockNumber}: {hash: string, blockNumber: number}) => ({
-        hash: decode(hash),
-        blockNumber
-      }))
+        const encoded = await getFromENSGraph(
+          `query GetENSContentHashes($resolverId: String!) {
+            contenthashChangeds(where: {resolver: $resolverId}) {
+              blockNumber
+              hash
+            }
+          }`,
+          { resolverId },
+          (result: any) => result.data.contenthashChangeds
+        );
 
-      const decodedWithDate = await Promise.all(
-        decoded.map(async (obj: any) => {
-          const block = await ethereumProvider.getBlock(obj.blockNumber)
-          return {...obj, date: block.timestamp}
-        })
-      )
-      setSnapshots(decodedWithDate)
-      setUrl(decodedWithDate[decoded.length - 1].hash)
+        const decoded = encoded.map(({ hash, blockNumber }: { hash: string; blockNumber: number }) => ({
+          hash: decode(hash),
+          blockNumber
+        }));
 
-      // Add event type 
-      console.log(data)
-    })()
-  }, [_url])
+        const decodedWithDate = await Promise.all(
+          decoded.map(async (obj: any) => {
+            const block = await ethereumProvider.getBlock(obj.blockNumber);
+            return { ...obj, date: block.timestamp };
+          })
+        );
 
-  return (
+        setSnapshots(decodedWithDate);
+        setUrl(decodedWithDate[decoded.length - 1].hash);
+
+        const getDomainId = await getFromENSGraph(
+          `query GetDomainId($domainName: String!){
+              domains(where: {name: $domainName}) {
+                  id
+              }
+          }`,
+          { domainName: _url },
+          (result: any) => setDomainId(result.data.domains[0].id)
+        );
+
+        const getTransfers = await getFromENSGraph(
+          `query GetDomainTransfers($domainId: String!) {
+            domainEvents(
+              where: {domain: $domainId}
+            ) {
+              ... on Transfer {
+                id
+                transactionID
+                blockNumber
+                owner {
+                  id
+                }
+              }
+            }
+          }`,
+          { domainId: domainId },
+          (result: any) => setTransfers(result.data.domainEvents)
+        );
+
+        // Get Wrapped Transfers
+        const getWrappedTransfers = await getFromENSGraph(
+          `query GetDomainTransfers($domainId: String!) {
+            domainEvents(
+              where: {domain: $domainId}
+            ) {
+              ... on WrappedTransfer {
+                id
+                transactionID
+                blockNumber
+                owner {
+                  id
+                }
+              }
+            }
+          }`,
+          { domainId: domainId },
+          (result: any) => setWrappedTransfers(result.data.domainEvents)
+        );
+
+        const filteredWrappedTransfers = wrappedTransfers.filter(obj => Object.keys(obj).length > 0)
+
+        filteredWrappedTransfers.forEach(async obj => {
+          obj.date = new Date((await ethereumProvider.getBlock(obj.blockNumber)).timestamp * 1000)
+        });
+
+        setWrappedTransfers(filteredWrappedTransfers)
+        // sometimes it does not work, is there any error with the code or is there any api limit?
+        console.log(filteredWrappedTransfers)
+      })()
+      ;
+    }
+  }, [_url, domainId]);
+return (
+  <Box
+    position={'relative'}
+  >
     <Box
-      position={'relative'}
-    >
-      <Box
-        bg='primary.100'>
-        <Flex
-          px='30px'
-          pt='15px'
-          alignItems="center"
-          direction={['column', 'column', 'row']}
-        >
-          <Box minWidth="120px">
-            <Link to='/'>
-              <Box mb={5}>
-                <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
-              </Box>
-            </Link>
-          </Box>
-          <Box width="100%">
-            <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={url} />
-          </Box>
-        </Flex>
-        <iframe width="100%" style={{minHeight: "100vh", border: 0}} src={url? url: ''} />
-      </Box>
+      bg='primary.100'>
+      <Flex
+        px='30px'
+        pt='15px'
+        alignItems="center"
+        direction={['column', 'column', 'row']}
+      >
+        <Box minWidth="120px">
+          <Link to='/'>
+            <Box mb={5}>
+              <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
+            </Box>
+          </Link>
+        </Box>
+        <Box width="100%">
+          <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={url} />
+        </Box>
+      </Flex>
+      <iframe width="100%" style={{ minHeight: "100vh", border: 0 }} src={url ? url : ''} />
     </Box>
-  );
+  </Box>
+);
 }
