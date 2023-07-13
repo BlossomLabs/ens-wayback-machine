@@ -17,6 +17,7 @@ type TimelineItemProps = {
 };
 
 const TimelineItem = ({ date, onClick, isActive }: TimelineItemProps) => {
+
   const [ref, isInView] = useIsInView();
   const formattedDate = date.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -24,15 +25,18 @@ const TimelineItem = ({ date, onClick, isActive }: TimelineItemProps) => {
     day: 'numeric',
   });
 
+  // Handle first event (Domain created?)
+
   const contentUploadIcon = "timeline-icons/content-upload.svg"
-  const firstContentUploadIcon = "timeline-icons/first-content-upload.svg"
+  const firstEventIcon = "timeline-icons/first-content-upload.svg"
 
   return (
-    <Tooltip label={formattedDate} hasArrow placement={isActive ? "top": "bottom"} isOpen={!isInView ? false : isActive ? true : undefined}>
-      <Flex ref={ref} direction="column" alignItems="center" onClick={onClick} cursor="pointer">
-      <Circle size="16px" mx="3" bg={isActive? "black" : "primary.900"} mt={2} />
-
+    <Tooltip label={formattedDate} hasArrow placement={isActive ? "top" : "bottom"} isOpen={!isInView ? false : isActive ? true : undefined}>
+      <Flex ref={ref} direction="column" alignItems="center" onClick={onClick} cursor="pointer" mt={1}>
+        {/*<Circle size="16px" mx="3" bg={isActive? "black" : "primary.900"} mt={2} />*/}
+        <Image src={isActive ? "timeline-icons/content-upload.svg" : "timeline-icons/content-upload.svg"} height={32} width={32} alt="Content upload" />
       </Flex>
+
     </Tooltip>
   );
 };
@@ -88,10 +92,10 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
           backgroundPosition="0 14px"
           height="60px"
         >
-          <Flex 
-            position="absolute" 
-            justifyContent="space-between" 
-            width={`${100 * zoom}%`} 
+          <Flex
+            position="absolute"
+            justifyContent="space-between"
+            width={`${100 * zoom}%`}
             transformOrigin="left"
           >
             {data.map((item, index) => (
