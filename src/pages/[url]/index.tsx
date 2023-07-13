@@ -162,47 +162,71 @@ export default function PageViewer() {
             }
           }`,
           { domainId: domainId },
-          (result: any) => setWrappedTransfers(result.data.domainEvents)
+          (result: any) => {
+            // console.log(result.data.domainEvents)
+            setWrappedTransfers(result.data.domainEvents)
+          }
         );
 
-        const filteredWrappedTransfers = wrappedTransfers.filter(obj => Object.keys(obj).length > 0)
+        if (wrappedTransfers.length > 0) {
+          (async () => {
+            const filteredWrappedTransfers = wrappedTransfers.filter(obj => Object.keys(obj).length > 0);
+      
+            const updatedWrappedTransfers = await Promise.all(filteredWrappedTransfers.map(async obj => {
+              const block = await ethereumProvider.getBlock(obj.blockNumber);
+              return { ...obj, date: new Date(block.timestamp * 1000) };
+            }));
+      
+            setWrappedTransfers(updatedWrappedTransfers);
+            console.log(updatedWrappedTransfers);
+          })();
+        }
+      })();
 
-        filteredWrappedTransfers.forEach(async obj => {
-          obj.date = new Date((await ethereumProvider.getBlock(obj.blockNumber)).timestamp * 1000)
-        });
 
-        setWrappedTransfers(filteredWrappedTransfers)
-        // sometimes it does not work, is there any error with the code or is there any api limit?
-        console.log(filteredWrappedTransfers)
-      })()
-      ;
     }
   }, [_url, domainId]);
-return (
-  <Box
-    position={'relative'}
-  >
+
+  /*useEffect(() => {
+    if (wrappedTransfers.length > 0) {
+      (async () => {
+        const filteredWrappedTransfers = wrappedTransfers.filter(obj => Object.keys(obj).length > 0);
+  
+        const updatedWrappedTransfers = await Promise.all(filteredWrappedTransfers.map(async obj => {
+          const block = await ethereumProvider.getBlock(obj.blockNumber);
+          return { ...obj, date: new Date(block.timestamp * 1000) };
+        }));
+  
+        setWrappedTransfers(updatedWrappedTransfers);
+        console.log(updatedWrappedTransfers);
+      })();
+    }
+  }, [wrappedTransfers]);*/
+  return (
     <Box
-      bg='primary.100'>
-      <Flex
-        px='30px'
-        pt='15px'
-        alignItems="center"
-        direction={['column', 'column', 'row']}
-      >
-        <Box minWidth="120px">
-          <Link to='/'>
-            <Box mb={5}>
-              <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
-            </Box>
-          </Link>
-        </Box>
-        <Box width="100%">
-          <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={url} />
-        </Box>
-      </Flex>
-      <iframe width="100%" style={{ minHeight: "100vh", border: 0 }} src={url ? url : ''} />
+      position={'relative'}
+    >
+      <Box
+        bg='primary.100'>
+        <Flex
+          px='30px'
+          pt='15px'
+          alignItems="center"
+          direction={['column', 'column', 'row']}
+        >
+          <Box minWidth="120px">
+            <Link to='/'>
+              <Box mb={5}>
+                <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
+              </Box>
+            </Link>
+          </Box>
+          <Box width="100%">
+            <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={url} />
+          </Box>
+        </Flex>
+        <iframe width="100%" style={{ minHeight: "100vh", border: 0 }} src={url ? url : ''} />
+      </Box>
     </Box>
-  </Box>
-);
+  );
 }
