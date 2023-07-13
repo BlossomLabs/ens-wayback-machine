@@ -51,6 +51,33 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
         </Flex>
       </Tooltip>
     );
+  } else if(eventType === "wrappedTransfer") {
+     return(
+      <Tooltip
+        label={formattedDate}
+        hasArrow
+        placement={isActive ? "top" : "bottom"}
+        isOpen={!isInView ? false : isActive ? true : undefined}
+      >
+        <Flex
+          ref={ref}
+          direction="column"
+          alignItems="center"
+          onClick={onClick}
+          cursor="pointer"
+          mt={1}
+        >
+         <Circle size="32px" mx="3">
+            <Image
+              src={isActive ? "timeline-icons/new-owner.svg" : "timeline-icons/new-owner.svg"}
+              height={32}
+              width={32}
+              alt="First event"
+            />
+          </Circle>
+        </Flex>
+      </Tooltip>
+     );
   } else {
     return (
       <Tooltip
