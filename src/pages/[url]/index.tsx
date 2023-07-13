@@ -57,7 +57,8 @@ export default function PageViewer() {
 
   const data = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
-    urlValue: hash
+    urlValue: hash,
+    eventType: (hash? "contentUpload" : "newDomain")
   }))
 
   const handleSnapshotChange = (urlValue: string) => {
@@ -65,6 +66,7 @@ export default function PageViewer() {
   }
   useEffect(() => {
     if (_url) (async () => {
+      // Retrieve resolver
       const resolverId = await getFromENSGraph(`
         query GetENSResolver($ens: String!) {
           domains(where: {name: $ens}) {
@@ -80,6 +82,8 @@ export default function PageViewer() {
         return result.data.domains[0].resolver.id
       }
       )
+
+      // Retrieve information to generate urls
       const encoded = await getFromENSGraph(`
         query GetENSContentHashes($resolverId: String!) {
           contenthashChangeds(where: {resolver: $resolverId}) {
@@ -103,6 +107,9 @@ export default function PageViewer() {
       )
       setSnapshots(decodedWithDate)
       setUrl(decodedWithDate[decoded.length - 1].hash)
+
+      // Add event type 
+      console.log(data)
     })()
   }, [_url])
 

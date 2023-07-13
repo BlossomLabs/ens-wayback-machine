@@ -9,6 +9,8 @@ import { ChakraProvider } from '@chakra-ui/react'
 import {HashRouter as Router, Routes, Route} from 'react-router-dom';
 import { useEffect, useState } from "react";
 
+import '../styles/global.css'
+
 import Home from './index'
 import PageViewer from './[url]'
 
