@@ -40,13 +40,14 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
           cursor="pointer"
           mt={1}
         >
-          <Circle size="16px" mx="3" bg={isActive ? "black" : "primary.900"} mt={2} />
-          <Image
-            src={isActive ? "timeline-icons/first-event.svg" : "timeline-icons/first-event.svg"}
-            height={32}
-            width={32}
-            alt="First event"
-          />
+         <Circle size="32px" mx="3">
+            <Image
+              src={isActive ? "timeline-icons/first-event.svg" : "timeline-icons/first-event.svg"}
+              height={32}
+              width={32}
+              alt="First event"
+            />
+          </Circle>
         </Flex>
       </Tooltip>
     );
@@ -66,13 +67,14 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
           cursor="pointer"
           mt={1}
         >
-          <Circle size="16px" mx="3" bg={isActive ? "black" : "primary.900"} mt={2} />
-          <Image
-            src={isActive ? "timeline-icons/content-upload.svg" : "timeline-icons/content-upload.svg"}
-            height={32}
-            width={32}
-            alt="Content upload"
-          />
+          <Circle size="32px" mx="3">
+            <Image
+              src={isActive ? "timeline-icons/content-upload.svg" : "timeline-icons/content-upload.svg"}
+              height={32}
+              width={32}
+              alt="Content upload"
+            />
+          </Circle>
         </Flex>
       </Tooltip>
     );
@@ -122,7 +124,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
           position="relative"
           mx={8}
           mt={8}
-          overflowX="scroll"
+          style={{ overflowX: "scroll", scrollbarWidth: "none", msOverflowStyle: "none" }}
           className="hide-scrollbar"
           backgroundImage="linear-gradient(to right, primary.900 0%, primary.900 100%)"
           backgroundSize="100% 3px"
