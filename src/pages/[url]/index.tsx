@@ -59,12 +59,9 @@ export default function PageViewer() {
     blockNumber: number;
     owner: object;
     date: Date;
-    eventType: string;
   }[]>([]);
-const [data, setData] = useState<any[]>([]);
 
-
-  const snapshotsData = snapshots.map(({ date, hash }) => ({
+  const data = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
     urlValue: hash,
     eventType: hash ? "contentUpload" : "newDomain"
@@ -73,9 +70,6 @@ const [data, setData] = useState<any[]>([]);
   const handleSnapshotChange = (urlValue: string) => {
     setUrl(urlValue);
   };
-
-
-
 
   useEffect(() => {
     if (_url) {
@@ -132,7 +126,7 @@ const [data, setData] = useState<any[]>([]);
           (result: any) => setDomainId(result.data.domains[0].id)
         );
 
-        const getTransfers = await getFromENSGraph(
+        /*const getTransfers = await getFromENSGraph(
           `query GetDomainTransfers($domainId: String!) {
             domainEvents(
               where: {domain: $domainId}
@@ -149,7 +143,7 @@ const [data, setData] = useState<any[]>([]);
           }`,
           { domainId: domainId },
           (result: any) => setTransfers(result.data.domainEvents)
-        );
+        );*/
 
         // Get Wrapped Transfers
         const getWrappedTransfers = await getFromENSGraph(
@@ -169,7 +163,7 @@ const [data, setData] = useState<any[]>([]);
           }`,
           { domainId: domainId },
           (result: any) => {
-            // console.log(result.data.domainEvents)
+            console.log(result.data.domainEvents)
             setWrappedTransfers(result.data.domainEvents)
           }
         );
@@ -182,18 +176,14 @@ const [data, setData] = useState<any[]>([]);
               const block = await ethereumProvider.getBlock(obj.blockNumber);
               return { ...obj, date: new Date(block.timestamp * 1000), eventType: "wrappedTransfer" };
             }));
-                      
-            setWrappedTransfers(updatedWrappedTransfers)
+      
+            setWrappedTransfers(updatedWrappedTransfers);
+            console.log(updatedWrappedTransfers);
+            console.log(data)
           })();
         }
-
-        const combined: any[] = [...snapshotsData, ...wrappedTransfers]
-
-        setData(combined)
-
       })();
 
-      console.log(data)
 
     }
   }, [_url, domainId]);
