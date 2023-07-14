@@ -9,25 +9,12 @@ import Image from 'next/image';
 import { Base58 } from '@ethersproject/basex';
 import { toUtf8String } from '@ethersproject/strings';
 
+// Functions
+const getFromENSGraph = require('../../utils/ENSGraph')
+
 import Timeline from "../../components/Timeline";
 
 const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
-
-function getFromENSGraph(query: any, variables: any, path: any) {
-  return fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  })
-    .then((res) => res.json())
-    .then(path);
-
-}
 
 function decode(encoded: string) {
   if (!encoded.startsWith('0xe3') && !encoded.startsWith('0xe5')) {
