@@ -15,6 +15,8 @@ import { getDomainId } from "@/utils/domainId";
 
 import Timeline from "../../components/Timeline";
 import { getTransfersAndWrappedTransfers } from "@/utils/transfers";
+import { getResolverId } from "@/utils/resolverId";
+import { getContentHashes } from "@/utils/contentHashes";
 
 const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
 
@@ -41,7 +43,6 @@ export default function PageViewer() {
   const [url, setUrl] = useState('');
   const { url: _url } = useParams();
   const [domainId, setDomainId] = useState('');
-  const [transfers, setTransfers] = useState([]);
   const [wrappedTransfers, setWrappedTransfers] = useState<{
     id: string;
     transactionID: string;
@@ -49,6 +50,9 @@ export default function PageViewer() {
     owner: object;
     date: Date;
   }[]>([]);
+
+  const [timelineData, setTimelineData] = useState<any[]>([])
+
 
   const data = snapshots.map(({ date, hash }) => ({
     date: new Date(date * 1000),
@@ -63,33 +67,18 @@ export default function PageViewer() {
   useEffect(() => {
     if (_url) {
       (async () => {
-        const resolverId = await getFromENSGraph(
-          `query GetENSResolver($ens: String!) {
-            domains(where: {name: $ens}) {
-              name
-              resolver {
-                id
-              }
-            }
-          }`,
-          { ens: _url },
-          (result: any) => {
-            if (result.data.domains.length === 0) throw new Error('No resolver found');
-            return result.data.domains[0].resolver.id;
-          }
-        );
 
-        const encoded = await getFromENSGraph(
-          `query GetENSContentHashes($resolverId: String!) {
-            contenthashChangeds(where: {resolver: $resolverId}) {
-              blockNumber
-              hash
-            }
-          }`,
-          { resolverId },
-          (result: any) => result.data.contenthashChangeds
-        );
+        // Get resolver id
+        const resolverId = await getResolverId(_url).then((result) => {
+          return result
+        })
 
+        // Get content hashes
+        const encoded = await getContentHashes(resolverId).then((result) => {
+          return result
+        })
+
+        // Decode content hashes
         const decoded = encoded.map(({ hash, blockNumber }: { hash: string; blockNumber: number }) => ({
           hash: decode(hash),
           blockNumber
@@ -104,38 +93,21 @@ export default function PageViewer() {
 
         setSnapshots(decodedWithDate);
         setUrl(decodedWithDate[decoded.length - 1].hash);
-
-        /*const getTransfers = await getFromENSGraph(
-          `query GetDomainTransfers($domainId: String!) {
-            domainEvents(
-              where: {domain: $domainId}
-            ) {
-              ... on Transfer {
-                id
-                transactionID
-                blockNumber
-                owner {
-                  id
-                }
-              }
-            }
-          }`,
-          { domainId: domainId },
-          (result: any) => setTransfers(result.data.domainEvents)
-        );*/
-
-        // Get Wrapped Transfers
-
+      
+        // Get domainId
         await getDomainId(_url).then((result) => {
           setDomainId(result)
         })
 
+        // Get Wrapped Transfers
         await getTransfersAndWrappedTransfers(domainId).then((result) => {
           setWrappedTransfers(result)
         })
-
       })();
 
+
+      console.log(domainId)
+      console.log(wrappedTransfers)
 
     }
   }, [_url, domainId]);
