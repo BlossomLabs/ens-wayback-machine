@@ -14,6 +14,7 @@ import { getFromENSGraph } from "@/utils/ENSGraph";
 import { getDomainId } from "@/utils/domainId";
 
 import Timeline from "../../components/Timeline";
+import { getTransfersAndWrappedTransfers } from "@/utils/transfers";
 
 const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
 
@@ -129,42 +130,10 @@ export default function PageViewer() {
           setDomainId(result)
         })
 
-        const getWrappedTransfers = await getFromENSGraph(
-          `query GetDomainTransfers($domainId: String!) {
-            domainEvents(
-              where: {domain: $domainId}
-            ) {
-              ... on WrappedTransfer {
-                id
-                transactionID
-                blockNumber
-                owner {
-                  id
-                }
-              }
-            }
-          }`,
-          { domainId: domainId },
-          (result: any) => {
-            console.log(result.data.domainEvents)
-            setWrappedTransfers(result.data.domainEvents)
-          }
-        );
+        await getTransfersAndWrappedTransfers(domainId).then((result) => {
+          setWrappedTransfers(result)
+        })
 
-        if (wrappedTransfers.length > 0) {
-          (async () => {
-            const filteredWrappedTransfers = wrappedTransfers.filter(obj => Object.keys(obj).length > 0);
-      
-            const updatedWrappedTransfers = await Promise.all(filteredWrappedTransfers.map(async obj => {
-              const block = await ethereumProvider.getBlock(obj.blockNumber);
-              return { ...obj, date: new Date(block.timestamp * 1000), eventType: "wrappedTransfer" };
-            }));
-      
-            setWrappedTransfers(updatedWrappedTransfers);
-            console.log(updatedWrappedTransfers);
-            console.log(data)
-          })();
-        }
       })();
 
 
