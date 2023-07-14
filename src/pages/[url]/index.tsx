@@ -59,23 +59,21 @@ export default function PageViewer() {
           setDomainId(result)
         })
 
+      })();
+    }
+
+    if (domainId) {
+      (async () => {
         // Get Wrapped Transfers
         await getTransfersAndWrappedTransfers(domainId).then((result) => {
-          // Without console log it does not work. Why?
-          console.log(result)
           setWrappedTransfers(result)
         })
       })();
-
-
-      console.log(domainId)
-      console.log(wrappedTransfers)
-
     }
   }, [_url, domainId]);
 
 
-  if(data) {
+  if (data) {
     return (
       <Box
         position={'relative'}
