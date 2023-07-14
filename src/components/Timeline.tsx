@@ -16,6 +16,10 @@ type TimelineItemProps = {
   isActive?: boolean;
 };
 
+type wrappedTransfers = {
+  
+}
+
 const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps) => {
   const [ref, isInView] = useIsInView();
   const formattedDate = date.toLocaleDateString('en-US', {
@@ -109,10 +113,19 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
 };
 
 type TimelineProps = {
-  data: { date: Date; urlValue: string; eventType: string }[];
+  data: { 
+    id: string;
+    date: Date; 
+    urlValue: string; 
+    eventType: string;
+    blockNumber: number;
+    owner: object;
+    transactionID: string;
+  }[];
   onItemSelected: (urlValue: string) => void;
   activeItem: string;
 };
+
 
 const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   const [zoom, setZoom] = useState(1);
@@ -131,6 +144,8 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   const calculateFlexBasis = (data: TimelineItem[]) => {
     if (data.length === 0) return [];
     if (data.length === 1) return ['100%'];
+
+    console.log(data)
 
     const totalTime = data[data.length - 1].date.getTime() - data[0].date.getTime();
 

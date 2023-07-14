@@ -24,16 +24,11 @@ export default function PageViewer() {
     blockNumber: number;
     owner: object;
     date: Date;
+    urlValue: string; 
+    eventType: string;
   }[]>([]);
 
   const [timelineData, setTimelineData] = useState<any[]>([])
-
-
-  const data = snapshots.map(({ date, hash }) => ({
-    date: new Date(date * 1000),
-    urlValue: hash,
-    eventType: hash ? "contentUpload" : "newDomain"
-  }));
 
   const handleSnapshotChange = (urlValue: string) => {
     setUrl(urlValue);
@@ -72,8 +67,18 @@ export default function PageViewer() {
     }
   }, [_url, domainId]);
 
+  useEffect(() => {
+    const snapshotsData = snapshots.map(({ date, hash }) => ({
+      date: new Date(date * 1000),
+      urlValue: hash,
+      eventType: hash ? "contentUpload" : "newDomain"
+    }));
 
-  if (data) {
+    setTimelineData(snapshotsData.concat(wrappedTransfers))
+
+  }, [snapshots, wrappedTransfers])
+
+  if (timelineData) {
     return (
       <Box
         position={'relative'}
@@ -94,7 +99,7 @@ export default function PageViewer() {
               </Link>
             </Box>
             <Box width="100%">
-              <Timeline data={data} onItemSelected={handleSnapshotChange} activeItem={url} />
+              <Timeline data={timelineData}  onItemSelected={handleSnapshotChange} activeItem={url} />
             </Box>
           </Flex>
           <iframe width="100%" style={{ minHeight: "100vh", border: 0 }} src={url ? url : ''} />
@@ -103,6 +108,11 @@ export default function PageViewer() {
     );
   } else {
     // Handle screen when there is no data (user inputs url param)
+    return(
+      <>
+        <p>Nothing to see here</p>
+      </>
+    )
   }
 
 }
