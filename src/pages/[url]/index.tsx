@@ -10,7 +10,8 @@ import { Base58 } from '@ethersproject/basex';
 import { toUtf8String } from '@ethersproject/strings';
 
 // Functions
-const getFromENSGraph = require('../../utils/ENSGraph')
+import { getFromENSGraph } from "@/utils/ENSGraph";
+import { getDomainId } from "@/utils/domainId";
 
 import Timeline from "../../components/Timeline";
 
@@ -103,16 +104,6 @@ export default function PageViewer() {
         setSnapshots(decodedWithDate);
         setUrl(decodedWithDate[decoded.length - 1].hash);
 
-        const getDomainId = await getFromENSGraph(
-          `query GetDomainId($domainName: String!){
-              domains(where: {name: $domainName}) {
-                  id
-              }
-          }`,
-          { domainName: _url },
-          (result: any) => setDomainId(result.data.domains[0].id)
-        );
-
         /*const getTransfers = await getFromENSGraph(
           `query GetDomainTransfers($domainId: String!) {
             domainEvents(
@@ -133,6 +124,11 @@ export default function PageViewer() {
         );*/
 
         // Get Wrapped Transfers
+
+        await getDomainId(_url).then((result) => {
+          setDomainId(result)
+        })
+
         const getWrappedTransfers = await getFromENSGraph(
           `query GetDomainTransfers($domainId: String!) {
             domainEvents(
