@@ -1,11 +1,30 @@
 import React, { MouseEventHandler, useState } from 'react';
-import { Flex, Circle, Box, Tooltip, Button } from '@chakra-ui/react';
+import { Flex, Circle, Box, Tooltip, Button, useDisclosure } from '@chakra-ui/react';
 import useIsInView from '@/hooks/useIsInView';
 import Image from 'next/image';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
+
+type Owner = {
+  id: string;
+};
+
 
 type TimelineItem = {
-  date: Date;
-  urlValue: string;
+  id: string;
+  date: Date; 
+  urlValue: string; 
+  eventType: string;
+  blockNumber: number;
+  owner: Owner;
+  transactionID: string;
 };
 
 type TimelineItemProps = {
@@ -16,9 +35,12 @@ type TimelineItemProps = {
   isActive?: boolean;
 };
 
-type wrappedTransfers = {
-  
-}
+type TimelineProps = {
+  data: TimelineItem[];
+  onItemSelected: (urlValue: string) => void;
+  activeItem: string;
+};
+
 
 const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps) => {
   const [ref, isInView] = useIsInView();
@@ -112,32 +134,24 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
   }
 };
 
-type TimelineProps = {
-  data: { 
-    id: string;
-    date: Date; 
-    urlValue: string; 
-    eventType: string;
-    blockNumber: number;
-    owner: object;
-    transactionID: string;
-  }[];
-  onItemSelected: (urlValue: string) => void;
-  activeItem: string;
-};
-
-
 const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
+  const [selectedItem, setSelectedItem] = useState<TimelineItem | null>(null);
   const [zoom, setZoom] = useState(1);
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const maxZoom = 3;
   const minZoom = 0.5;
 
   const handleZoomIn = () => setZoom((prevZoom) => Math.min(prevZoom + 0.1, maxZoom));
   const handleZoomOut = () => setZoom((prevZoom) => Math.max(prevZoom - 0.1, minZoom));
 
-  const handleItemClick = (urlValue: string) => {
-    if (onItemSelected) {
+  const handleItemClick = (urlValue: string, eventType: string, item: TimelineItem) => {
+    
+
+    if (onItemSelected && eventType === "contentUpload") {
       onItemSelected(urlValue);
+    } else if (eventType === "wrappedTransfer") {
+      setSelectedItem(item)
+      onOpen();
     }
   };
 
@@ -182,7 +196,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
                   urlValue={item.urlValue}
                   eventType={item.eventType}
                   isActive={item.urlValue === activeItem}
-                  onClick={() => handleItemClick(item.urlValue)}
+                  onClick={() => handleItemClick(item.urlValue, item.eventType, item)}
                 />
               </Flex>
             ))}
@@ -195,8 +209,37 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
       <Button onClick={handleZoomOut} disabled={zoom <= minZoom}>
         Zoom Out
       </Button>
+      <div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{`Selected event date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* You can access the selected item's data here */}
+            {selectedItem && (
+              <div>
+                <p>{`Event happened at: ${selectedItem.date}`}</p>
+                <p>{`Event type: ${selectedItem.eventType}`}</p>
+                <p>{`Transaction block: ${selectedItem.blockNumber}`}</p>
+                <a href={`https://etherscan.io/tx/${selectedItem.transactionID}`} target='_blank'><p>{`Transaction ID: ${selectedItem.transactionID}`}</p></a>
+                {selectedItem.eventType === "wrappedTransfer" && (
+                  <p>{`New owner: ${selectedItem.owner.id}`}</p>
+                )}
+              </div>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      </div>
     </div>
   );
+
 };
 
 export default Timeline;
