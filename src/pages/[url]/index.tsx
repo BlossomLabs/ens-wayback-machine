@@ -108,6 +108,8 @@ export default function PageViewer() {
 
     let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...expiryData]
 
+    mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
+
     setTimelineData(mergedData)
 
   }, [snapshots, wrappedTransfers, transfers])
