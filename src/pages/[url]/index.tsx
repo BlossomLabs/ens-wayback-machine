@@ -84,16 +84,20 @@ export default function PageViewer() {
   }, [_url, domainId]);
 
   useEffect(() => {
-    const snapshotsData = snapshots.map(({ date, hash }) => ({
+    const snapshotsData: any[] = snapshots.map(({ date, hash }) => ({
       date: new Date(date * 1000),
       urlValue: hash,
       eventType: hash ? "contentUpload" : "newDomain"
     }));
 
-    if(wrappedTransfers) snapshotsData.concat(wrappedTransfers)
-    if(transfers) snapshotsData.concat(transfers)
+    let mergedData = [...snapshotsData, ...(wrappedTransfers || []), ...(transfers || [])]
 
-  }, [snapshots, wrappedTransfers, transfers])
+    setTimelineData(mergedData)
+
+}, [snapshots, wrappedTransfers, transfers])
+
+
+
 
   if (timelineData) {
     return (
@@ -116,7 +120,7 @@ export default function PageViewer() {
               </Link>
             </Box>
             <Box width="100%">
-              <Timeline data={timelineData}  onItemSelected={handleSnapshotChange} activeItem={url} />
+              <Timeline data={timelineData} onItemSelected={handleSnapshotChange} activeItem={url} />
             </Box>
           </Flex>
           <iframe width="100%" style={{ minHeight: "100vh", border: 0 }} src={url ? url : ''} />
