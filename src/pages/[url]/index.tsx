@@ -9,7 +9,8 @@ import Image from 'next/image';
 import { getDomainId } from "@/utils/domainId";
 
 import Timeline from "../../components/Timeline";
-import { getTransfersAndWrappedTransfers } from "@/utils/transfers";
+import { getWrappedTransfers } from "@/utils/wrappedTransfers";
+import { getTransfers } from "@/utils/transfers";
 import { getResolverId } from "@/utils/resolverId";
 import { getContentHashes } from "@/utils/contentHashes";
 
@@ -19,6 +20,16 @@ export default function PageViewer() {
   const { url: _url } = useParams();
   const [domainId, setDomainId] = useState('');
   const [wrappedTransfers, setWrappedTransfers] = useState<{
+    id: string;
+    transactionID: string;
+    blockNumber: number;
+    owner: object;
+    date: Date;
+    urlValue: string; 
+    eventType: string;
+  }[]>([]);
+
+  const [transfers, setTransfers] = useState<{
     id: string;
     transactionID: string;
     blockNumber: number;
@@ -60,8 +71,13 @@ export default function PageViewer() {
     if (domainId) {
       (async () => {
         // Get Wrapped Transfers
-        await getTransfersAndWrappedTransfers(domainId).then((result) => {
-          setWrappedTransfers(result)
+        await getWrappedTransfers(domainId).then((result) => {
+          if(result) setWrappedTransfers(result)
+        })
+
+        // Get Transfers
+        await getTransfers(domainId).then((result) => {
+          if(result) setTransfers(result)
         })
       })();
     }
