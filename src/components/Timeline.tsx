@@ -178,7 +178,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
 
     if (onItemSelected && eventType === "contentUpload") {
       onItemSelected(urlValue);
-    } else if (eventType === "wrappedTransfer") {
+    } else {
       setSelectedItem(item)
       onOpen();
     }
@@ -246,15 +246,23 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
           <ModalCloseButton />
           <ModalBody>
             {/* You can access the selected item's data here */}
-            {selectedItem && (
+            {selectedItem?.eventType === "transfer" || selectedItem?.eventType === "wrappedTransfer" && (
               <div>
                 <p>{`Event happened at: ${selectedItem.date}`}</p>
                 <p>{`Event type: ${selectedItem.eventType}`}</p>
-                <p>{`Transaction block: ${selectedItem.blockNumber}`}</p>
+                <a href={`https://etherscan.io/block/${selectedItem.blockNumber}`} target='_blank'><p>{`New owner: ${selectedItem.blockNumber}`}</p></a>
                 <a href={`https://etherscan.io/tx/${selectedItem.transactionID}`} target='_blank'><p>{`Transaction ID: ${selectedItem.transactionID}`}</p></a>
-                {selectedItem.eventType === "wrappedTransfer" && (
-                  <p>{`New owner: ${selectedItem.owner.id}`}</p>
-                )}
+                <a href={`https://etherscan.io/address/${selectedItem.owner}`} target='_blank'><p>{`New owner: ${selectedItem.owner.id}`}</p></a>
+              </div>
+            )}
+            {selectedItem?.eventType === "domainRegistration" && (
+              <div>
+                <p>{`Domain registered at: ${selectedItem.date}`}</p>
+              </div>
+            )}
+            {selectedItem?.eventType === "domainExpiration" && (
+              <div>
+                <p>{`Domain expiration at: ${selectedItem.date}`}</p>
               </div>
             )}
           </ModalBody>
