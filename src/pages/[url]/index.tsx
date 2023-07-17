@@ -90,9 +90,10 @@ export default function PageViewer() {
       eventType: hash ? "contentUpload" : "newDomain"
     }));
 
-    setTimelineData(snapshotsData.concat(wrappedTransfers))
+    if(wrappedTransfers) snapshotsData.concat(wrappedTransfers)
+    if(transfers) snapshotsData.concat(transfers)
 
-  }, [snapshots, wrappedTransfers])
+  }, [snapshots, wrappedTransfers, transfers])
 
   if (timelineData) {
     return (
