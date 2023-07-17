@@ -252,7 +252,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
                 <p>{`Event type: ${selectedItem.eventType}`}</p>
                 <a href={`https://etherscan.io/block/${selectedItem.blockNumber}`} target='_blank'><p>{`New owner: ${selectedItem.blockNumber}`}</p></a>
                 <a href={`https://etherscan.io/tx/${selectedItem.transactionID}`} target='_blank'><p>{`Transaction ID: ${selectedItem.transactionID}`}</p></a>
-                <a href={`https://etherscan.io/address/${selectedItem.owner}`} target='_blank'><p>{`New owner: ${selectedItem.owner.id}`}</p></a>
+                <a href={`https://etherscan.io/address/${selectedItem.owner.id}`} target='_blank'><p>{`New owner: ${selectedItem.owner.id}`}</p></a>
               </div>
             )}
             {selectedItem?.eventType === "domainRegistration" && (
