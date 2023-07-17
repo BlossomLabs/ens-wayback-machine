@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
 // Functions
-import { getDomainId } from "@/utils/domainId";
+import { getDomainData } from "@/utils/domainId";
 
 import Timeline from "../../components/Timeline";
 import { getWrappedTransfers } from "@/utils/wrappedTransfers";
@@ -19,13 +19,15 @@ export default function PageViewer() {
   const [url, setUrl] = useState('');
   const { url: _url } = useParams();
   const [domainId, setDomainId] = useState('');
+  const [expiryDate, setExpiryDate] = useState(Date)
+  const [createdAtDate, setCreatedAtDate] = useState(Date)
   const [wrappedTransfers, setWrappedTransfers] = useState<{
     id: string;
     transactionID: string;
     blockNumber: number;
     owner: object;
     date: Date;
-    urlValue: string; 
+    urlValue: string;
     eventType: string;
   }[]>([]);
 
@@ -35,7 +37,7 @@ export default function PageViewer() {
     blockNumber: number;
     owner: object;
     date: Date;
-    urlValue: string; 
+    urlValue: string;
     eventType: string;
   }[]>([]);
 
@@ -61,8 +63,10 @@ export default function PageViewer() {
         })
 
         // Get domainId
-        await getDomainId(_url).then((result) => {
-          setDomainId(result)
+        await getDomainData(_url).then((result) => {
+          setDomainId(result.domainId)
+          setExpiryDate(result.expiryDate)
+          setCreatedAtDate(result.createdAt)
         })
 
       })();
@@ -72,29 +76,41 @@ export default function PageViewer() {
       (async () => {
         // Get Wrapped Transfers
         await getWrappedTransfers(domainId).then((result) => {
-          if(result) setWrappedTransfers(result)
+          if (result) setWrappedTransfers(result)
         })
 
         // Get Transfers
         await getTransfers(domainId).then((result) => {
-          if(result) setTransfers(result)
+          if (result) setTransfers(result)
         })
       })();
     }
   }, [_url, domainId]);
 
   useEffect(() => {
+    // Process snapshots data
     const snapshotsData: any[] = snapshots.map(({ date, hash }) => ({
       date: new Date(date * 1000),
       urlValue: hash,
-      eventType: hash ? "contentUpload" : "newDomain"
-    }));
+      eventType: hash ? "contentUpload" : null // remove those without hash (no new content)
+    })); 
 
-    let mergedData = [...snapshotsData, ...(wrappedTransfers || []), ...(transfers || [])]
+    // Process domain creation date and expiry date
+    const expiryData: { date: Date, eventType: string }[] = [{
+      date: new Date(expiryDate),
+      eventType: 'domainExpiration'
+    }];
+
+    const createdAtData: { date: Date, eventType: string}[] = [{
+      date: new Date(createdAtDate),
+      eventType: 'domainRegistration'
+    }]
+
+    let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...expiryData]
 
     setTimelineData(mergedData)
 
-}, [snapshots, wrappedTransfers, transfers])
+  }, [snapshots, wrappedTransfers, transfers])
 
 
 
@@ -129,7 +145,7 @@ export default function PageViewer() {
     );
   } else {
     // Handle screen when there is no data (user inputs url param)
-    return(
+    return (
       <>
         <p>Nothing to see here</p>
       </>
