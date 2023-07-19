@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
 // Functions
-import { getDomainData } from "@/utils/domainId";
+import { getDomainData } from "@/utils/domainData";
 
 import Timeline from "../../components/Timeline";
 import { getWrappedTransfers } from "@/utils/wrappedTransfers";

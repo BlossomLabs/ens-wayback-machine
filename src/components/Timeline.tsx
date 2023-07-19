@@ -243,7 +243,9 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{`Selected event date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>
+          {selectedItem?.eventType === "transfer" && (<ModalHeader>{`Transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
+          {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
+          {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered at: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
           <ModalCloseButton />
           <ModalBody>
             {/* You can access the selected item's data here */}
@@ -252,19 +254,6 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
                 <Box>
                   <Text as="span" fontWeight="bold">Event happened at: </Text>
                   <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                </Box>
-                <Box>
-                  <Text as="span" fontWeight="bold">Event type: </Text>
-                  <Text as="span" fontWeight="normal">{selectedItem.eventType}</Text>
-                </Box>
-                <Box>
-                  <Link>
-                  </Link>
-                  <Text as="span" fontWeight="bold">Block number: </Text>
-                  <Link href={`https://etherscan.io/block/${selectedItem.blockNumber}`} isExternal>
-                    <Text as="span" fontWeight="normal">{selectedItem.blockNumber}</Text>
-                    <ExternalLinkIcon mx='4px' />
-                  </Link>
                 </Box>
                 <Box>
                   <Text as="span" fontWeight="bold">Transaction ID: </Text>
@@ -283,22 +272,6 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
                       <ExternalLinkIcon mx='4px' />
                     </Link>
                   </Tooltip>
-                </Box>
-              </div>
-            )}
-            {selectedItem?.eventType === "domainRegistration" && (
-              <div>
-                <Box>
-                  <Text as="span" fontWeight="bold">Domain registered: </Text>
-                  <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                </Box>
-              </div>
-            )}
-            {selectedItem?.eventType === "domainExpiration" && (
-              <div>
-                <Box>
-                  <Text as="span" fontWeight="bold">Expected domain expiration: </Text>
-                  <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
                 </Box>
               </div>
             )}
