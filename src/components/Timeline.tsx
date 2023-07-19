@@ -1,5 +1,6 @@
 import React, { MouseEventHandler, useState } from 'react';
-import { Flex, Circle, Box, Tooltip, Button, useDisclosure } from '@chakra-ui/react';
+import { Flex, Circle, Box, Tooltip, Button, useDisclosure, Text, Link } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import useIsInView from '@/hooks/useIsInView';
 import Image from 'next/image';
 import {
@@ -248,21 +249,57 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
             {/* You can access the selected item's data here */}
             {selectedItem?.eventType === "transfer" || selectedItem?.eventType === "wrappedTransfer" && (
               <div>
-                <p>{`Event happened at: ${selectedItem.date}`}</p>
-                <p>{`Event type: ${selectedItem.eventType}`}</p>
-                <a href={`https://etherscan.io/block/${selectedItem.blockNumber}`} target='_blank'><p>{`New owner: ${selectedItem.blockNumber}`}</p></a>
-                <a href={`https://etherscan.io/tx/${selectedItem.transactionID}`} target='_blank'><p>{`Transaction ID: ${selectedItem.transactionID}`}</p></a>
-                <a href={`https://etherscan.io/address/${selectedItem.owner.id}`} target='_blank'><p>{`New owner: ${selectedItem.owner.id}`}</p></a>
+                <Box>
+                  <Text as="span" fontWeight="bold">Event happened at: </Text>
+                  <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
+                </Box>
+                <Box>
+                  <Text as="span" fontWeight="bold">Event type: </Text>
+                  <Text as="span" fontWeight="normal">{selectedItem.eventType}</Text>
+                </Box>
+                <Box>
+                  <Link>
+                  </Link>
+                  <Text as="span" fontWeight="bold">Block number: </Text>
+                  <Link href={`https://etherscan.io/block/${selectedItem.blockNumber}`} isExternal>
+                    <Text as="span" fontWeight="normal">{selectedItem.blockNumber}</Text>
+                    <ExternalLinkIcon mx='4px' />
+                  </Link>
+                </Box>
+                <Box>
+                  <Text as="span" fontWeight="bold">Transaction ID: </Text>
+                  <Tooltip label={selectedItem.transactionID}>
+                    <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
+                      <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
+                      <ExternalLinkIcon mx='4px' />
+                    </Link>
+                  </Tooltip>
+                </Box>
+                <Box>
+                  <Text as="span" fontWeight="bold">New owner: </Text>
+                  <Tooltip label={selectedItem.owner.id}>
+                    <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
+                      <Text as="span" fontWeight="normal">{selectedItem.owner.id.slice(0, 6) + '...' + selectedItem.owner.id.slice(-4)}</Text>
+                      <ExternalLinkIcon mx='4px' />
+                    </Link>
+                  </Tooltip>
+                </Box>
               </div>
             )}
             {selectedItem?.eventType === "domainRegistration" && (
               <div>
-                <p>{`Domain registered at: ${selectedItem.date}`}</p>
+                <Box>
+                  <Text as="span" fontWeight="bold">Domain registered: </Text>
+                  <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
+                </Box>
               </div>
             )}
             {selectedItem?.eventType === "domainExpiration" && (
               <div>
-                <p>{`Domain expiration at: ${selectedItem.date}`}</p>
+                <Box>
+                  <Text as="span" fontWeight="bold">Expected domain expiration: </Text>
+                  <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
+                </Box>
               </div>
             )}
           </ModalBody>
