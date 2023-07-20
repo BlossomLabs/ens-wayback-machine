@@ -76,8 +76,9 @@ export default function PageViewer() {
           setDomainId(result.domainId)
           setInitialDomainOwnerId(result.ownerId)
           setDomainRegistrantId(result.registrantId)
-          setInitialExpiryDate(result.initialExpiryDate)
-          setCreatedAtDate(result.createdAt)
+          setInitialExpiryDate(result[0].initialExpiryDate)
+          setCreatedAtDate(result[0].createdAt)
+          console.log(result)
         })
 
       })();

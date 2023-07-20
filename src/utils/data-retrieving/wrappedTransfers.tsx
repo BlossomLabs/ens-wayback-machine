@@ -30,7 +30,8 @@ export const getWrappedTransfers = async (domainId: string) => {
         // Obtain block timestamp and add event type
         const processedWrappedTransfers = await Promise.all(filteredWrappedTransfers.map(async (obj: any) => {
           const block = await ethereumProvider.getBlock(obj.blockNumber);
-          return { ...obj, date: new Date(block.timestamp * 1000), eventType: "wrappedTransfer" };
+          const lookupOwner = await ethereumProvider.lookupAddress(obj.owner.id)
+          return { ...obj, date: new Date(block.timestamp * 1000), eventType: "wrappedTransfer", ownerLookedUp: lookupOwner};
         }));
 
         // Return the array with the wrapped transfers

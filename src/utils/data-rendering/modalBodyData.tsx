@@ -13,7 +13,9 @@ type ModalData = {
     initialDomainOwner: string,
     domainRegistrantId: string,
     initialExpiryDate: Date,
-    expiryDate: number
+    expiryDate: number,
+    ownerLookedUp: string,
+    registrarLookedUp: string
 }
 
 export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
@@ -38,7 +40,12 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                     <Text as="span" fontWeight="bold">New owner: </Text>
                     <Tooltip label={selectedItem.owner.id}>
                         <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
-                            <Text as="span" fontWeight="normal">{selectedItem.owner.id.slice(0, 6) + '...' + selectedItem.owner.id.slice(-4)}</Text>
+                            {selectedItem.ownerLookedUp && (
+                                <Text as="span" fontWeight="normal">{selectedItem.ownerLookedUp}</Text>
+                            )}
+                            {!selectedItem.ownerLookedUp && (
+                                <Text as="span" fontWeight="normal">{selectedItem.owner.id.slice(0, 6) + '...' + selectedItem.owner.id.slice(-4)}</Text>
+                            )}
                             <ExternalLinkIcon mx='4px' />
                         </Link>
                     </Tooltip>
@@ -60,7 +67,12 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                     <Text as="span" fontWeight="bold">Domain owner: </Text>
                     <Tooltip label={selectedItem.initialDomainOwner}>
                         <Link href={`https://etherscan.io/address/${selectedItem.initialDomainOwner}`} isExternal>
+                            {selectedItem.ownerLookedUp && (
+                                <Text as="span" fontWeight="normal">{selectedItem.ownerLookedUp}</Text>
+                            )}
+                             {!selectedItem.ownerLookedUp && (
                             <Text as="span" fontWeight="normal">{selectedItem.initialDomainOwner.slice(0, 6) + '...' + selectedItem.initialDomainOwner.slice(-4)}</Text>
+                             )}
                             <ExternalLinkIcon mx='4px' />
                         </Link>
                     </Tooltip>
@@ -69,7 +81,12 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                     <Text as="span" fontWeight="bold">Domain registrant: </Text>
                     <Tooltip label={selectedItem.domainRegistrantId}>
                         <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
+                            {selectedItem.registrarLookedUp && (
+                            <Text as="span" fontWeight="normal">{selectedItem.registrarLookedUp}</Text>
+                            )}
+                            {!selectedItem.registrarLookedUp && (
                             <Text as="span" fontWeight="normal">{selectedItem.domainRegistrantId.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
+                            )}
                             <ExternalLinkIcon mx='4px' />
                         </Link>
                     </Tooltip>
