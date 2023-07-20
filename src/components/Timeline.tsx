@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box, Tooltip, Button, useDisclosure, Text, Link } from '@chakra-ui/react';
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { Flex, Box, Button, useDisclosure, } from '@chakra-ui/react';
 import {
   Modal,
   ModalOverlay,
@@ -12,10 +11,7 @@ import {
 } from '@chakra-ui/react'
 
 import { TimelineItem } from '@/utils/data-rendering/timelineItem';
-
-type Owner = {
-  id: string;
-};
+import { ModalBodyData } from '@/utils/data-rendering/modalBodyData';
 
 type TimelineData = {
   id: string;
@@ -23,7 +19,7 @@ type TimelineData = {
   urlValue: string;
   eventType: string;
   blockNumber: number;
-  owner: Owner;
+  owner: {id: string};
   transactionID: string;
   initialDomainOwner: string;
   domainRegistrantId: string;
@@ -119,61 +115,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
             {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered at: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
             <ModalCloseButton />
             <ModalBody>
-              {/* You can access the selected item's data here */}
-              {selectedItem?.eventType === "transfer" || selectedItem?.eventType === "wrappedTransfer" && (
-                <div>
-                  <Box>
-                    <Text as="span" fontWeight="bold">Event happened at: </Text>
-                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                  </Box>
-                  <Box>
-                    <Text as="span" fontWeight="bold">Transaction ID: </Text>
-                    <Tooltip label={selectedItem.transactionID}>
-                      <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
-                        <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
-                        <ExternalLinkIcon mx='4px' />
-                      </Link>
-                    </Tooltip>
-                  </Box>
-                  <Box>
-                    <Text as="span" fontWeight="bold">New owner: </Text>
-                    <Tooltip label={selectedItem.owner.id}>
-                      <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
-                        <Text as="span" fontWeight="normal">{selectedItem.owner.id.slice(0, 6) + '...' + selectedItem.owner.id.slice(-4)}</Text>
-                        <ExternalLinkIcon mx='4px' />
-                      </Link>
-                    </Tooltip>
-                  </Box>
-                </div>
-              )}
-
-              {selectedItem?.eventType === "domainRegistration" && (
-                <div>
-                  <Box>
-                    <Text as="span" fontWeight="bold">Event happened at: </Text>
-                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                  </Box>
-                  <Box>
-                    <Text as="span" fontWeight="bold">Domain owner: </Text>
-                    <Tooltip label={selectedItem.transactionID}>
-                      <Link href={`https://etherscan.io/address/${selectedItem.initialDomainOwner}`} isExternal>
-                        <Text as="span" fontWeight="normal">{selectedItem.initialDomainOwner.slice(0, 6) + '...' + selectedItem.initialDomainOwner.slice(-4)}</Text>
-                        <ExternalLinkIcon mx='4px' />
-                      </Link>
-                    </Tooltip>
-                  </Box>
-                  <Box>
-                    <Text as="span" fontWeight="bold">Domain registrant: </Text>
-                    <Tooltip label={selectedItem.transactionID}>
-                      <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
-                        <Text as="span" fontWeight="normal">{selectedItem.domainRegistrantId.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
-                        <ExternalLinkIcon mx='4px' />
-                      </Link>
-                    </Tooltip>
-                  </Box>
-                </div>
-
-              )}
+            <ModalBodyData selectedItem={selectedItem}/>
           </ModalBody>
             <ModalFooter>
               <Button colorScheme='blue' mr={3} onClick={onClose}>
