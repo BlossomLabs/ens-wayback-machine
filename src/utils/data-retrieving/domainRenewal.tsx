@@ -20,7 +20,6 @@ export const getDomainRenewals = async (ens: any) => {
           }`,
         { labelName: labelName },
         async (result: any) => {
-            console.log(result)
             if (result.data.registrationEvents.length > 0) {
                 // Remove empty objects (TheGraph returns empty object if event type does not match)
                 const filtereDomainRenewals = result.data.registrationEvents.filter((obj: object) => Object.keys(obj).length > 0);

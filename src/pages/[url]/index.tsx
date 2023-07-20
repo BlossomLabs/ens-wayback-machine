@@ -5,10 +5,10 @@ import { Box, Flex } from "@chakra-ui/react"
 import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
-// Functions
+import Timeline from "../../components/Timeline";
 import { getDomainData } from "@/utils/data-retrieving/domainData";
 
-import Timeline from "../../components/Timeline";
+// Custom functions
 import { getWrappedTransfers } from "@/utils/data-retrieving/wrappedTransfers";
 import { getTransfers } from "@/utils/data-retrieving/transfers";
 import { getResolverId } from "@/utils/data-retrieving/resolverId";
@@ -76,7 +76,7 @@ export default function PageViewer() {
           setDomainId(result.domainId)
           setInitialDomainOwnerId(result.ownerId)
           setDomainRegistrantId(result.registrantId)
-          setInitialExpiryDate(result.initialExpiryDate) // change to new tool
+          setInitialExpiryDate(result.initialExpiryDate)
           setCreatedAtDate(result.createdAt)
         })
 
