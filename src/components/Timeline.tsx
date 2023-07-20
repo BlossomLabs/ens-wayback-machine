@@ -17,7 +17,7 @@ type Owner = {
   id: string;
 };
 
-type TimelineItem = {
+type TimelineData = {
   id: string;
   date: Date;
   urlValue: string;
@@ -30,13 +30,13 @@ type TimelineItem = {
 };
 
 type TimelineProps = {
-  data: TimelineItem[];
+  data: TimelineData[];
   onItemSelected: (urlValue: string) => void;
   activeItem: string;
 };
 
 const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
-  const [selectedItem, setSelectedItem] = useState<TimelineItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<TimelineData | null>(null);
   const [zoom, setZoom] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure()
   const maxZoom = 3;
@@ -45,7 +45,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   const handleZoomIn = () => setZoom((prevZoom) => Math.min(prevZoom + 0.1, maxZoom));
   const handleZoomOut = () => setZoom((prevZoom) => Math.max(prevZoom - 0.1, minZoom));
 
-  const handleItemClick = (urlValue: string, eventType: string, item: TimelineItem) => {
+  const handleItemClick = (urlValue: string, eventType: string, item: TimelineData) => {
 
 
     if (onItemSelected && eventType === "contentUpload") {
@@ -56,7 +56,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
     }
   };
 
-  const calculateFlexBasis = (data: TimelineItem[]) => {
+  const calculateFlexBasis = (data: TimelineData[]) => {
     if (data.length === 0) return [];
     if (data.length === 1) return ['100%'];
 
@@ -64,7 +64,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
 
     const totalTime = data[data.length - 1].date.getTime() - data[0].date.getTime();
 
-    return data.map((item: TimelineItem, index: number) => {
+    return data.map((item: TimelineData, index: number) => {
       if (index === 0) return '0%';
       const prevItem = data[index - 1];
       const interval = item.date.getTime() - prevItem.date.getTime();
