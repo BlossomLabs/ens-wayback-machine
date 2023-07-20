@@ -4,20 +4,26 @@ import { StaticJsonRpcProvider } from '@ethersproject/providers'
 const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
 
 
-export const getDomainRenewals = async (domainId: string) => {
+export const getDomainRenewals = async (ens: any) => {
+    // Get labelName
+    const labelName = ens.slice(0, -4)
+
     return getFromENSGraph(
-        `query domainRenewal($domainId: String!) {
-          expiryExtendeds(where: {domain_: {id: $domainId}}) {
+        `query GetDomainRenewals($labelName: String!){
+            registrationEvents(where: {registration_: {labelName: $labelName}}) {
+              ... on NameRenewed {
+                blockNumber
                 transactionID
                 expiryDate
-                blockNumber
+              }
             }
-        }`,
-        { domainId: domainId },
+          }`,
+        { labelName: labelName },
         async (result: any) => {
-            if (result.data.expiryExtendeds.length > 0) {
+            console.log(result)
+            if (result.data.registrationEvents.length > 0) {
                 // Remove empty objects (TheGraph returns empty object if event type does not match)
-                const filtereDomainRenewals = result.data.expiryExtendeds.filter((obj: object) => Object.keys(obj).length > 0);
+                const filtereDomainRenewals = result.data.registrationEvents.filter((obj: object) => Object.keys(obj).length > 0);
 
                 // Obtain block timestamp and add event type
                 const processedExpiryExtendeds = await Promise.all(filtereDomainRenewals.map(async (obj: any) => {

@@ -22,7 +22,7 @@ export default function PageViewer() {
   const [domainId, setDomainId] = useState('');
   const [domainRegistrantId, setDomainRegistrantId] = useState('')
   const [initialDomainOwnerId, setInitialDomainOwnerId] = useState('')
-  const [expiryDate, setExpiryDate] = useState(Date)
+  const [initialExpiryDate, setInitialExpiryDate] = useState(Date)
   const [createdAtDate, setCreatedAtDate] = useState(Date)
   const [domainRenewals, setDomainRenewals] = useState<{
     date: Date,
@@ -76,7 +76,7 @@ export default function PageViewer() {
           setDomainId(result.domainId)
           setInitialDomainOwnerId(result.ownerId)
           setDomainRegistrantId(result.registrantId)
-          setExpiryDate(result.expiryDate)
+          setInitialExpiryDate(result.initialExpiryDate) // change to new tool
           setCreatedAtDate(result.createdAt)
         })
 
@@ -96,7 +96,7 @@ export default function PageViewer() {
         })
 
         // Get Expiry Extensions (Domain renewal)
-        await getDomainRenewals("0x10493a1f403945a5536c9b6694cb09e33c36e27a7a4a358a9659a9d3007b2f52").then((result) => {
+        await getDomainRenewals(_url).then((result) => {
           if (result) setDomainRenewals(result)
         })
       })();
@@ -111,20 +111,15 @@ export default function PageViewer() {
       eventType: hash ? "contentUpload" : null // remove those without hash (no new content)
     })); 
 
-    // Process domain creation date and expiry date
-    const expiryData: { date: Date, eventType: string }[] = [{
-      date: new Date(expiryDate),
-      eventType: 'domainExpiration'
-    }];
-
-    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string}[] = [{
+    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string, initialExpiryDate: Date}[] = [{
       date: new Date(createdAtDate),
       eventType: 'domainRegistration',
       initialDomainOwner: initialDomainOwnerId,
       domainRegistrantId: domainRegistrantId,
+      initialExpiryDate: new Date(initialExpiryDate),
     }]
 
-    let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...(domainRenewals || []), ...expiryData]
+    let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...(domainRenewals || [])]
 
     mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
 

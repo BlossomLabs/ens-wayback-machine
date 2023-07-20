@@ -12,6 +12,7 @@ type ModalData = {
     owner: { id: string },
     initialDomainOwner: string,
     domainRegistrantId: string,
+    initialExpiryDate: Date,
     expiryDate: number
 }
 
@@ -50,6 +51,10 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                 <Box>
                     <Text as="span" fontWeight="bold">Event happened at: </Text>
                     <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
+                </Box>
+                <Box>
+                    <Text as="span" fontWeight="bold">Domain expiration: </Text>
+                    <Text as="span" fontWeight="normal">{selectedItem.initialExpiryDate.toDateString()}</Text>
                 </Box>
                 <Box>
                     <Text as="span" fontWeight="bold">Domain owner: </Text>
