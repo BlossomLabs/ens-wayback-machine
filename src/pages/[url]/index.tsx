@@ -13,6 +13,7 @@ import { getWrappedTransfers } from "@/utils/data-retrieving/wrappedTransfers";
 import { getTransfers } from "@/utils/data-retrieving/transfers";
 import { getResolverId } from "@/utils/data-retrieving/resolverId";
 import { getContentHashes } from "@/utils/data-retrieving/contentHashes";
+import { getDomainRenewals } from "@/utils/data-retrieving/domainRenewal";
 
 export default function PageViewer() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);
@@ -23,6 +24,12 @@ export default function PageViewer() {
   const [initialDomainOwnerId, setInitialDomainOwnerId] = useState('')
   const [expiryDate, setExpiryDate] = useState(Date)
   const [createdAtDate, setCreatedAtDate] = useState(Date)
+  const [domainRenewals, setDomainRenewals] = useState<{
+    date: Date,
+    expiryDate: string,
+    transactionID: string,
+    eventType: string
+  }[]>([]);
   const [wrappedTransfers, setWrappedTransfers] = useState<{
     id: string;
     transactionID: string;
@@ -87,6 +94,11 @@ export default function PageViewer() {
         await getTransfers(domainId).then((result) => {
           if (result) setTransfers(result)
         })
+
+        // Get Expiry Extensions (Domain renewal)
+        await getDomainRenewals("0x10493a1f403945a5536c9b6694cb09e33c36e27a7a4a358a9659a9d3007b2f52").then((result) => {
+          if (result) setDomainRenewals(result)
+        })
       })();
     }
   }, [_url, domainId]);
@@ -112,15 +124,16 @@ export default function PageViewer() {
       domainRegistrantId: domainRegistrantId,
     }]
 
-    let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...expiryData]
+    let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...(domainRenewals || []), ...expiryData]
 
     mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
 
     setTimelineData(mergedData)
 
-  }, [snapshots, wrappedTransfers, transfers])
+  }, [snapshots, wrappedTransfers, transfers, domainRenewals])
 
 
+  console.log(timelineData)
 
 
   if (timelineData) {

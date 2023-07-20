@@ -56,8 +56,6 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
     if (data.length === 0) return [];
     if (data.length === 1) return ['100%'];
 
-    console.log(data)
-
     const totalTime = data[data.length - 1].date.getTime() - data[0].date.getTime();
 
     return data.map((item: TimelineData, index: number) => {
