@@ -47,7 +47,7 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
           </Flex>
         </Tooltip>
       );
-    } else if (eventType === "domainExpiration") {
+    } else if (eventType === "domainRenewal") {
       return (
         <Tooltip
           label={formattedDate}

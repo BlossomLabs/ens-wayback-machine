@@ -132,10 +132,6 @@ export default function PageViewer() {
 
   }, [snapshots, wrappedTransfers, transfers, domainRenewals])
 
-
-  console.log(timelineData)
-
-
   if (timelineData) {
     return (
       <Box

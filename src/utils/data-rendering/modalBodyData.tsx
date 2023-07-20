@@ -11,7 +11,8 @@ type ModalData = {
     transactionID: string,
     owner: { id: string },
     initialDomainOwner: string,
-    domainRegistrantId: string
+    domainRegistrantId: string,
+    expiryDate: number
 }
 
 export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
@@ -52,7 +53,7 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                 </Box>
                 <Box>
                     <Text as="span" fontWeight="bold">Domain owner: </Text>
-                    <Tooltip label={selectedItem.transactionID}>
+                    <Tooltip label={selectedItem.initialDomainOwner}>
                         <Link href={`https://etherscan.io/address/${selectedItem.initialDomainOwner}`} isExternal>
                             <Text as="span" fontWeight="normal">{selectedItem.initialDomainOwner.slice(0, 6) + '...' + selectedItem.initialDomainOwner.slice(-4)}</Text>
                             <ExternalLinkIcon mx='4px' />
@@ -61,9 +62,31 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                 </Box>
                 <Box>
                     <Text as="span" fontWeight="bold">Domain registrant: </Text>
-                    <Tooltip label={selectedItem.transactionID}>
+                    <Tooltip label={selectedItem.domainRegistrantId}>
                         <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
                             <Text as="span" fontWeight="normal">{selectedItem.domainRegistrantId.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
+                            <ExternalLinkIcon mx='4px' />
+                        </Link>
+                    </Tooltip>
+                </Box>
+            </div>
+        )
+    } else if (selectedItem?.eventType === "domainRenewal") {
+        return (
+            <div>
+                <Box>
+                    <Text as="span" fontWeight="bold">Event happened at: </Text>
+                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
+                </Box>
+                <Box>
+                    <Text as="span" fontWeight="bold">New expiry date: </Text>
+                    <Text as="span" fontWeight="normal">{new Date(selectedItem.expiryDate * 1000).toDateString()}</Text>
+                </Box>
+                <Box>
+                    <Text as="span" fontWeight="bold">Transaction ID: </Text>
+                    <Tooltip label={selectedItem.transactionID}>
+                        <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
+                            <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
                             <ExternalLinkIcon mx='4px' />
                         </Link>
                     </Tooltip>

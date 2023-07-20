@@ -23,6 +23,8 @@ type TimelineData = {
   transactionID: string;
   initialDomainOwner: string;
   domainRegistrantId: string;
+  expiryDate: number;
+
 };
 
 type TimelineProps = {
@@ -111,6 +113,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
             {selectedItem?.eventType === "transfer" && (<ModalHeader>{`Transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
             {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
             {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered at: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
+            {selectedItem?.eventType === "domainRenewal" && (<ModalHeader>{`Domain renewed: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
             <ModalCloseButton />
             <ModalBody>
             <ModalBodyData selectedItem={selectedItem}/>
