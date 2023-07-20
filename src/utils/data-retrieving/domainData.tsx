@@ -45,7 +45,7 @@ export const getDomainData = async (ens: string) => {
       }`,
     { labelName: labelName },
     async (result: any) => {
-      console.log(result);
+
       if (result.data.registrationEvents.length > 0) {
         // Remove empty objects (TheGraph returns empty object if event type does not match)
         const filteredDate = result.data.registrationEvents.filter((obj: object) => Object.keys(obj).length > 0);
@@ -60,8 +60,6 @@ export const getDomainData = async (ens: string) => {
       }
     }
   );
-
-  console.log(initialDomainExpiry)
 
   return { ...domainData, ...initialDomainExpiry };
 };

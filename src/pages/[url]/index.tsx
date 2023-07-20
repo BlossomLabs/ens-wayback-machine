@@ -24,6 +24,8 @@ export default function PageViewer() {
   const [initialDomainOwnerId, setInitialDomainOwnerId] = useState('')
   const [initialExpiryDate, setInitialExpiryDate] = useState(Date)
   const [createdAtDate, setCreatedAtDate] = useState(Date)
+  const [ownerLookedUp, setOwnerLookedUp] = useState('')
+  const [registrarLookedUp, setRegistrarLookedUp] = useState('')
   const [domainRenewals, setDomainRenewals] = useState<{
     date: Date,
     expiryDate: string,
@@ -76,9 +78,10 @@ export default function PageViewer() {
           setDomainId(result.domainId)
           setInitialDomainOwnerId(result.ownerId)
           setDomainRegistrantId(result.registrantId)
+          setOwnerLookedUp(result.ownerLookedUp)
+          setRegistrarLookedUp(result.registrarLookedUp)
           setInitialExpiryDate(result[0].initialExpiryDate)
           setCreatedAtDate(result[0].createdAt)
-          console.log(result)
         })
 
       })();
@@ -112,12 +115,14 @@ export default function PageViewer() {
       eventType: hash ? "contentUpload" : null // remove those without hash (no new content)
     })); 
 
-    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string, initialExpiryDate: Date}[] = [{
+    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string, initialExpiryDate: Date, ownerLookedUp: string, registrarLookedUp: string}[] = [{
       date: new Date(createdAtDate),
       eventType: 'domainRegistration',
       initialDomainOwner: initialDomainOwnerId,
       domainRegistrantId: domainRegistrantId,
       initialExpiryDate: new Date(initialExpiryDate),
+      ownerLookedUp: ownerLookedUp,
+      registrarLookedUp: registrarLookedUp
     }]
 
     let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...(domainRenewals || [])]
