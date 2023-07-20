@@ -6,13 +6,13 @@ import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
 // Functions
-import { getDomainData } from "@/utils/domainData";
+import { getDomainData } from "@/utils/data-retrieving/domainData";
 
 import Timeline from "../../components/Timeline";
-import { getWrappedTransfers } from "@/utils/wrappedTransfers";
-import { getTransfers } from "@/utils/transfers";
-import { getResolverId } from "@/utils/resolverId";
-import { getContentHashes } from "@/utils/contentHashes";
+import { getWrappedTransfers } from "@/utils/data-retrieving/wrappedTransfers";
+import { getTransfers } from "@/utils/data-retrieving/transfers";
+import { getResolverId } from "@/utils/data-retrieving/resolverId";
+import { getContentHashes } from "@/utils/data-retrieving/contentHashes";
 
 export default function PageViewer() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);

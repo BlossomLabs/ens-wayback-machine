@@ -1,8 +1,6 @@
-import React, { MouseEventHandler, useState } from 'react';
-import { Flex, Circle, Box, Tooltip, Button, useDisclosure, Text, Link } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Flex, Box, Tooltip, Button, useDisclosure, Text, Link } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import useIsInView from '@/hooks/useIsInView';
-import Image from 'next/image';
 import {
   Modal,
   ModalOverlay,
@@ -13,10 +11,11 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 
+import { TimelineItem } from '@/utils/data-rendering/timelineItem';
+
 type Owner = {
   id: string;
 };
-
 
 type TimelineItem = {
   id: string;
@@ -30,140 +29,10 @@ type TimelineItem = {
   domainRegistrantId: string;
 };
 
-type TimelineItemProps = {
-  date: Date;
-  urlValue: string;
-  eventType: string;
-  onClick?: MouseEventHandler;
-  isActive?: boolean;
-};
-
 type TimelineProps = {
   data: TimelineItem[];
   onItemSelected: (urlValue: string) => void;
   activeItem: string;
-};
-
-
-const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps) => {
-  const [ref, isInView] = useIsInView();
-  const formattedDate = date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  if (eventType === "domainRegistration") {
-    return (
-      <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
-      >
-        <Flex
-          ref={ref}
-          direction="column"
-          alignItems="center"
-          onClick={onClick}
-          cursor="pointer"
-          mt={1}
-        >
-          <Circle size="32px" mx="3">
-            <Image
-              src={isActive ? "timeline-icons/first-event.svg" : "timeline-icons/first-event.svg"}
-              height={32}
-              width={32}
-              alt="First event"
-            />
-          </Circle>
-        </Flex>
-      </Tooltip>
-    );
-  } else if (eventType === "domainExpiration") {
-    return (
-      <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
-      >
-        <Flex
-          ref={ref}
-          direction="column"
-          alignItems="center"
-          onClick={onClick}
-          cursor="pointer"
-          mt={1}
-        >
-          <Circle size="32px" mx="3">
-            <Image
-              src={isActive ? "timeline-icons/domain-renewal.svg" : "timeline-icons/domain-renewal.svg"}
-              height={32}
-              width={32}
-              alt="First event"
-            />
-          </Circle>
-        </Flex>
-      </Tooltip>
-    );
-  } else if (eventType === "wrappedTransfer") {
-    return (
-      <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
-      >
-        <Flex
-          ref={ref}
-          direction="column"
-          alignItems="center"
-          onClick={onClick}
-          cursor="pointer"
-          mt={1}
-        >
-          <Circle size="32px" mx="3">
-            <Image
-              src={isActive ? "timeline-icons/new-owner.svg" : "timeline-icons/new-owner.svg"}
-              height={32}
-              width={32}
-              alt="First event"
-            />
-          </Circle>
-        </Flex>
-      </Tooltip>
-    );
-  } else if (eventType === "contentUpload") {
-    return (
-      <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
-      >
-        <Flex
-          ref={ref}
-          direction="column"
-          alignItems="center"
-          onClick={onClick}
-          cursor="pointer"
-          mt={1}
-        >
-          <Circle size="32px" mx="3">
-            <Image
-              src={isActive ? "timeline-icons/content-upload.svg" : "timeline-icons/content-upload.svg"}
-              height={32}
-              width={32}
-              alt="Content upload"
-            />
-          </Circle>
-        </Flex>
-      </Tooltip>
-    );
-  } else {
-    return null
-  }
 };
 
 const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
