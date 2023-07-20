@@ -21,6 +21,7 @@ export default function PageViewer() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);
   const [url, setUrl] = useState('');
   const { url: _url } = useParams();
+  const [loading, setLoading] = useState(true)
   const [resolverId, setResolverId] = useState('')
   const [domainId, setDomainId] = useState('');
   const [domainRegistrantId, setDomainRegistrantId] = useState('')
@@ -67,6 +68,9 @@ export default function PageViewer() {
         // Get resolver id
         await getResolverId(_url).then((result) => {
           setResolverId(result)
+          if (!result) {
+            setLoading(false)
+          }
         })
       })();
     } 
@@ -141,7 +145,35 @@ export default function PageViewer() {
 
   }, [snapshots, wrappedTransfers, transfers, domainRenewals])
 
-  if (!resolverId) {
+  if (!resolverId && loading) {
+    return (
+      <>
+      <Flex
+        minHeight="100vh"
+        align="center"
+        justify="center"
+      >
+        <Container>
+          <Box
+            backgroundColor="rgba(193, 143, 101, 0.9)"
+            borderRadius="8px"
+            border={"2px solid black"}
+            p={4}
+          >
+            <Box bg="primary.500" borderRadius="5px" p={4} mt="-60px" border="3px solid black">
+              <Heading textAlign="center" fontSize={"37px"}>
+                ENS Wayback Machine
+              </Heading>
+            </Box>
+            <Text textAlign="center" mt={4} fontSize={"26px"}>
+              Loading...
+            </Text>
+            </Box>
+        </Container>
+      </Flex>
+      </>
+    )
+  } else if (!resolverId && !loading) {
     return (
       <>
       <Flex
