@@ -20,12 +20,14 @@ type Owner = {
 
 type TimelineItem = {
   id: string;
-  date: Date; 
-  urlValue: string; 
+  date: Date;
+  urlValue: string;
   eventType: string;
   blockNumber: number;
   owner: Owner;
   transactionID: string;
+  initialDomainOwner: string;
+  domainRegistrantId: string;
 };
 
 type TimelineItemProps = {
@@ -67,7 +69,7 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
           cursor="pointer"
           mt={1}
         >
-         <Circle size="32px" mx="3">
+          <Circle size="32px" mx="3">
             <Image
               src={isActive ? "timeline-icons/first-event.svg" : "timeline-icons/first-event.svg"}
               height={32}
@@ -79,7 +81,7 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
       </Tooltip>
     );
   } else if (eventType === "domainExpiration") {
-     return(
+    return (
       <Tooltip
         label={formattedDate}
         hasArrow
@@ -94,7 +96,7 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
           cursor="pointer"
           mt={1}
         >
-         <Circle size="32px" mx="3">
+          <Circle size="32px" mx="3">
             <Image
               src={isActive ? "timeline-icons/domain-renewal.svg" : "timeline-icons/domain-renewal.svg"}
               height={32}
@@ -104,9 +106,9 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
           </Circle>
         </Flex>
       </Tooltip>
-     );
-  } else if(eventType === "wrappedTransfer") {
-     return(
+    );
+  } else if (eventType === "wrappedTransfer") {
+    return (
       <Tooltip
         label={formattedDate}
         hasArrow
@@ -121,7 +123,7 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
           cursor="pointer"
           mt={1}
         >
-         <Circle size="32px" mx="3">
+          <Circle size="32px" mx="3">
             <Image
               src={isActive ? "timeline-icons/new-owner.svg" : "timeline-icons/new-owner.svg"}
               height={32}
@@ -131,7 +133,7 @@ const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps)
           </Circle>
         </Flex>
       </Tooltip>
-     );
+    );
   } else if (eventType === "contentUpload") {
     return (
       <Tooltip
@@ -175,7 +177,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   const handleZoomOut = () => setZoom((prevZoom) => Math.max(prevZoom - 0.1, minZoom));
 
   const handleItemClick = (urlValue: string, eventType: string, item: TimelineItem) => {
-    
+
 
     if (onItemSelected && eventType === "contentUpload") {
       onItemSelected(urlValue);
@@ -240,49 +242,77 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
         Zoom Out
       </Button>
       <div>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          {selectedItem?.eventType === "transfer" && (<ModalHeader>{`Transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
-          {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
-          {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered at: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
-          <ModalCloseButton />
-          <ModalBody>
-            {/* You can access the selected item's data here */}
-            {selectedItem?.eventType === "transfer" || selectedItem?.eventType === "wrappedTransfer" && (
-              <div>
-                <Box>
-                  <Text as="span" fontWeight="bold">Event happened at: </Text>
-                  <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                </Box>
-                <Box>
-                  <Text as="span" fontWeight="bold">Transaction ID: </Text>
-                  <Tooltip label={selectedItem.transactionID}>
-                    <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
-                      <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
-                      <ExternalLinkIcon mx='4px' />
-                    </Link>
-                  </Tooltip>
-                </Box>
-                <Box>
-                  <Text as="span" fontWeight="bold">New owner: </Text>
-                  <Tooltip label={selectedItem.owner.id}>
-                    <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
-                      <Text as="span" fontWeight="normal">{selectedItem.owner.id.slice(0, 6) + '...' + selectedItem.owner.id.slice(-4)}</Text>
-                      <ExternalLinkIcon mx='4px' />
-                    </Link>
-                  </Tooltip>
-                </Box>
-              </div>
-            )}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            {selectedItem?.eventType === "transfer" && (<ModalHeader>{`Transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
+            {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
+            {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered at: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
+            <ModalCloseButton />
+            <ModalBody>
+              {/* You can access the selected item's data here */}
+              {selectedItem?.eventType === "transfer" || selectedItem?.eventType === "wrappedTransfer" && (
+                <div>
+                  <Box>
+                    <Text as="span" fontWeight="bold">Event happened at: </Text>
+                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
+                  </Box>
+                  <Box>
+                    <Text as="span" fontWeight="bold">Transaction ID: </Text>
+                    <Tooltip label={selectedItem.transactionID}>
+                      <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
+                        <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
+                        <ExternalLinkIcon mx='4px' />
+                      </Link>
+                    </Tooltip>
+                  </Box>
+                  <Box>
+                    <Text as="span" fontWeight="bold">New owner: </Text>
+                    <Tooltip label={selectedItem.owner.id}>
+                      <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
+                        <Text as="span" fontWeight="normal">{selectedItem.owner.id.slice(0, 6) + '...' + selectedItem.owner.id.slice(-4)}</Text>
+                        <ExternalLinkIcon mx='4px' />
+                      </Link>
+                    </Tooltip>
+                  </Box>
+                </div>
+              )}
+
+              {selectedItem?.eventType === "domainRegistration" && (
+                <div>
+                  <Box>
+                    <Text as="span" fontWeight="bold">Event happened at: </Text>
+                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
+                  </Box>
+                  <Box>
+                    <Text as="span" fontWeight="bold">Domain owner: </Text>
+                    <Tooltip label={selectedItem.transactionID}>
+                      <Link href={`https://etherscan.io/address/${selectedItem.initialDomainOwner}`} isExternal>
+                        <Text as="span" fontWeight="normal">{selectedItem.initialDomainOwner.slice(0, 6) + '...' + selectedItem.initialDomainOwner.slice(-4)}</Text>
+                        <ExternalLinkIcon mx='4px' />
+                      </Link>
+                    </Tooltip>
+                  </Box>
+                  <Box>
+                    <Text as="span" fontWeight="bold">Domain registrant: </Text>
+                    <Tooltip label={selectedItem.transactionID}>
+                      <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
+                        <Text as="span" fontWeight="normal">{selectedItem.domainRegistrantId.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
+                        <ExternalLinkIcon mx='4px' />
+                      </Link>
+                    </Tooltip>
+                  </Box>
+                </div>
+
+              )}
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
     </div>
   );

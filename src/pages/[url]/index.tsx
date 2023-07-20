@@ -19,6 +19,8 @@ export default function PageViewer() {
   const [url, setUrl] = useState('');
   const { url: _url } = useParams();
   const [domainId, setDomainId] = useState('');
+  const [domainRegistrantId, setDomainRegistrantId] = useState('')
+  const [initialDomainOwnerId, setInitialDomainOwnerId] = useState('')
   const [expiryDate, setExpiryDate] = useState(Date)
   const [createdAtDate, setCreatedAtDate] = useState(Date)
   const [wrappedTransfers, setWrappedTransfers] = useState<{
@@ -65,6 +67,8 @@ export default function PageViewer() {
         // Get domainId
         await getDomainData(_url).then((result) => {
           setDomainId(result.domainId)
+          setInitialDomainOwnerId(result.ownerId)
+          setDomainRegistrantId(result.registrantId)
           setExpiryDate(result.expiryDate)
           setCreatedAtDate(result.createdAt)
         })
@@ -101,9 +105,11 @@ export default function PageViewer() {
       eventType: 'domainExpiration'
     }];
 
-    const createdAtData: { date: Date, eventType: string}[] = [{
+    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string}[] = [{
       date: new Date(createdAtDate),
-      eventType: 'domainRegistration'
+      eventType: 'domainRegistration',
+      initialDomainOwner: initialDomainOwnerId,
+      domainRegistrantId: domainRegistrantId,
     }]
 
     let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...expiryData]
