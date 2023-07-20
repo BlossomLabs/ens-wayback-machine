@@ -1,5 +1,7 @@
 'use client';
 
+import { Card, Text, Input, InputGroup, InputLeftElement, Heading, Container, HStack } from "@chakra-ui/react"
+
 import { useEffect, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react"
 import { Link, useParams } from "react-router-dom";
@@ -19,6 +21,7 @@ export default function PageViewer() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);
   const [url, setUrl] = useState('');
   const { url: _url } = useParams();
+  const [resolverId, setResolverId] = useState('')
   const [domainId, setDomainId] = useState('');
   const [domainRegistrantId, setDomainRegistrantId] = useState('')
   const [initialDomainOwnerId, setInitialDomainOwnerId] = useState('')
@@ -61,12 +64,17 @@ export default function PageViewer() {
   useEffect(() => {
     if (_url) {
       (async () => {
-
         // Get resolver id
-        const resolverId = await getResolverId(_url).then((result) => {
-          return result
+        await getResolverId(_url).then((result) => {
+          setResolverId(result)
         })
+      })();
+    } 
+  }, [_url])
 
+  useEffect(() => {
+    if (_url && resolverId) {
+      (async () => {
         // Get content
         await getContentHashes(resolverId).then((result) => {
           setSnapshots(result.decodedWithDate)
@@ -105,7 +113,7 @@ export default function PageViewer() {
         })
       })();
     }
-  }, [_url, domainId]);
+  }, [_url, domainId, resolverId]);
 
   useEffect(() => {
     // Process snapshots data
@@ -113,9 +121,9 @@ export default function PageViewer() {
       date: new Date(date * 1000),
       urlValue: hash,
       eventType: hash ? "contentUpload" : null // remove those without hash (no new content)
-    })); 
+    }));
 
-    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string, initialExpiryDate: Date, ownerLookedUp: string, registrarLookedUp: string}[] = [{
+    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string, initialExpiryDate: Date, ownerLookedUp: string, registrarLookedUp: string }[] = [{
       date: new Date(createdAtDate),
       eventType: 'domainRegistration',
       initialDomainOwner: initialDomainOwnerId,
@@ -133,7 +141,40 @@ export default function PageViewer() {
 
   }, [snapshots, wrappedTransfers, transfers, domainRenewals])
 
-  if (timelineData) {
+  if (!resolverId) {
+    return (
+      <>
+      <Flex
+        minHeight="100vh"
+        align="center"
+        justify="center"
+      >
+        <Container>
+          <Box
+            backgroundColor="rgba(193, 143, 101, 0.9)"
+            borderRadius="8px"
+            border={"2px solid black"}
+            p={4}
+          >
+            <Box bg="primary.500" borderRadius="5px" p={4} mt="-60px" border="3px solid black">
+              <Heading textAlign="center" fontSize={"37px"}>
+                ENS Wayback Machine
+              </Heading>
+            </Box>
+            <Text textAlign="center" mt={4} fontSize={"26px"}>
+              This domain is not available, please, go back and try again.
+            </Text>
+            <Link to={'/'}>
+            <Text textAlign="center" fontWeight="bold" mt={8} fontSize={"32px"}>
+              Click here to go back
+            </Text>
+            </Link>
+            </Box>
+        </Container>
+      </Flex>
+      </>
+    )
+  } else {
     return (
       <Box
         position={'relative'}
@@ -161,13 +202,5 @@ export default function PageViewer() {
         </Box>
       </Box>
     );
-  } else {
-    // Handle screen when there is no data (user inputs url param)
-    return (
-      <>
-        <p>Nothing to see here</p>
-      </>
-    )
   }
-
 }

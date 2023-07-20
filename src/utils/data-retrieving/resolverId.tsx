@@ -12,7 +12,7 @@ export const getResolverId = async(ens: string) => {
         }`,
         { ens: ens },
         (result: any) => {
-          if (result.data.domains.length === 0) throw new Error('No resolver found');
+          if (result.data.domains.length === 0) return null
           return result.data.domains[0].resolver.id;
         }
     )

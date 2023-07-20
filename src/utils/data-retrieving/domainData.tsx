@@ -25,9 +25,9 @@ export const getDomainData = async (ens: string) => {
       const ownerLookedUp = await ethereumProvider.lookupAddress(result.data.domains[0].owner.id);
       const registrarLookedUp = await ethereumProvider.lookupAddress(result.data.domains[0].owner.id);
       return {
-        domainId: result.data.domains[0].id,
-        ownerId: result.data.domains[0].owner.id,
-        registrantId: result.data.domains[0].registrant.id,
+        domainId: result.data.domains[0]?.id,
+        ownerId: result.data.domains[0]?.owner.id,
+        registrantId: result.data.domains[0]?.registrant.id,
         ownerLookedUp: ownerLookedUp,
         registrarLookedUp: registrarLookedUp,
       };
