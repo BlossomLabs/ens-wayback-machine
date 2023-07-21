@@ -17,6 +17,10 @@ import { getResolverId } from "@/utils/data-retrieving/resolverId";
 import { getContentHashes } from "@/utils/data-retrieving/contentHashes";
 import { getDomainRenewals } from "@/utils/data-retrieving/domainRenewal";
 
+// Pages
+import DomainUnavailableComponent from "../../components/DomainUnavailable";
+import LoadingContentComponent from "@/components/Loading";
+
 export default function PageViewer() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);
   const [url, setUrl] = useState('');
@@ -148,62 +152,13 @@ export default function PageViewer() {
   if (!resolverId && loading) {
     return (
       <>
-      <Flex
-        minHeight="100vh"
-        align="center"
-        justify="center"
-      >
-        <Container>
-          <Box
-            backgroundColor="rgba(193, 143, 101, 0.9)"
-            borderRadius="8px"
-            border={"2px solid black"}
-            p={4}
-          >
-            <Box bg="primary.500" borderRadius="5px" p={4} mt="-60px" border="3px solid black">
-              <Heading textAlign="center" fontSize={"37px"}>
-                ENS Wayback Machine
-              </Heading>
-            </Box>
-            <Text textAlign="center" mt={4} fontSize={"26px"}>
-              Loading...
-            </Text>
-            </Box>
-        </Container>
-      </Flex>
+        <LoadingContentComponent />
       </>
     )
   } else if (!resolverId && !loading) {
     return (
       <>
-      <Flex
-        minHeight="100vh"
-        align="center"
-        justify="center"
-      >
-        <Container>
-          <Box
-            backgroundColor="rgba(193, 143, 101, 0.9)"
-            borderRadius="8px"
-            border={"2px solid black"}
-            p={4}
-          >
-            <Box bg="primary.500" borderRadius="5px" p={4} mt="-60px" border="3px solid black">
-              <Heading textAlign="center" fontSize={"37px"}>
-                ENS Wayback Machine
-              </Heading>
-            </Box>
-            <Text textAlign="center" mt={4} fontSize={"26px"}>
-              This domain is not available, please, go back and try again.
-            </Text>
-            <Link to={'/'}>
-            <Text textAlign="center" fontWeight="bold" mt={8} fontSize={"32px"}>
-              Click here to go back
-            </Text>
-            </Link>
-            </Box>
-        </Container>
-      </Flex>
+        <DomainUnavailableComponent />
       </>
     )
   } else {
