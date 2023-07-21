@@ -19,7 +19,8 @@ import { getDomainRenewals } from "@/utils/data-retrieving/domainRenewal";
 
 // Pages
 import DomainUnavailableComponent from "../../components/DomainUnavailable";
-import LoadingContentComponent from "@/components/Loading";
+import LoadingContentComponent from "@/components/LoadingContent";
+import ContentUnavailableComponent from "@/components/ContentUnavailable";
 
 export default function PageViewer() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);
@@ -85,8 +86,11 @@ export default function PageViewer() {
       (async () => {
         // Get content
         await getContentHashes(resolverId).then((result) => {
-          setSnapshots(result.decodedWithDate)
-          setUrl(result.url)
+          if(result) {
+            setSnapshots(result.decodedWithDate)
+            setUrl(result.url)
+          }
+          setLoading(false)
         })
 
         // Get domainId
@@ -161,7 +165,13 @@ export default function PageViewer() {
         <DomainUnavailableComponent />
       </>
     )
-  } else {
+  } else if (resolverId && snapshots.length === 0 && !loading) {
+    return (
+      <>
+        <ContentUnavailableComponent />
+      </>
+    )
+  } else if (snapshots.length > 0) {
     return (
       <Box
         position={'relative'}
@@ -189,5 +199,7 @@ export default function PageViewer() {
         </Box>
       </Box>
     );
+  } else {
+    return null
   }
 }

@@ -12,7 +12,6 @@ export const getResolverId = async(ens: string) => {
         }`,
         { ens: ens },
         (result: any) => {
-          console.log(result)
           if (result.data.domains.length === 0) return null
           if (result.data.domains[0].resolver === null) return null // sometimes returns domain but not resolver
           return result.data.domains[0].resolver.id;
