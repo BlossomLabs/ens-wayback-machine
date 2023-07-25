@@ -24,11 +24,11 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
         return (
             <div>
                 <Box>
-                    <Text as="span" fontWeight="bold">Event happened at: </Text>
+                    <Text as="span" fontWeight="bold">Date: </Text>
                     <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
                 </Box>
                 <Box>
-                    <Text as="span" fontWeight="bold">Transaction ID: </Text>
+                    <Text as="span" fontWeight="bold">Transaction: </Text>
                     <Tooltip label={selectedItem.transactionID}>
                         <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
                             <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
@@ -56,7 +56,7 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
         return (
             <div>
                 <Box>
-                    <Text as="span" fontWeight="bold">Event happened at: </Text>
+                    <Text as="span" fontWeight="bold">Date: </Text>
                     <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
                 </Box>
                 <Box>
@@ -97,7 +97,7 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
         return (
             <div>
                 <Box>
-                    <Text as="span" fontWeight="bold">Event happened at: </Text>
+                    <Text as="span" fontWeight="bold">Date: </Text>
                     <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
                 </Box>
                 <Box>
@@ -105,7 +105,7 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                     <Text as="span" fontWeight="normal">{new Date(selectedItem.expiryDate * 1000).toDateString()}</Text>
                 </Box>
                 <Box>
-                    <Text as="span" fontWeight="bold">Transaction ID: </Text>
+                    <Text as="span" fontWeight="bold">Transaction: </Text>
                     <Tooltip label={selectedItem.transactionID}>
                         <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
                             <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>

@@ -1,6 +1,19 @@
 import { extendTheme } from '@chakra-ui/react';
-import { cardAnatomy, inputAnatomy } from '@chakra-ui/anatomy'
+import { cardAnatomy, inputAnatomy, modalAnatomy } from '@chakra-ui/anatomy'
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
+
+const modalTheme = () => {
+  const { definePartsStyle, defineMultiStyleConfig } =
+      createMultiStyleConfigHelpers(modalAnatomy.keys)
+  return defineMultiStyleConfig({
+    baseStyle: definePartsStyle({
+      dialog: {
+        borderRadius: 'lg',
+        bg: 'primary.100',
+      }
+    })
+  })
+}
 
 const cardTheme = () => {
   const { definePartsStyle, defineMultiStyleConfig } =
@@ -102,6 +115,7 @@ const theme = extendTheme({
         },
       },
     },
+    Modal: modalTheme(),
     Card: cardTheme(),
     Heading: {
       baseStyle: {

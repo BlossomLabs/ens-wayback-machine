@@ -5,7 +5,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
@@ -110,19 +109,14 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
-            {selectedItem?.eventType === "transfer" && (<ModalHeader>{`Transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
-            {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer date: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
-            {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered at: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
-            {selectedItem?.eventType === "domainRenewal" && (<ModalHeader>{`Domain renewed: ${selectedItem?.date.toLocaleDateString()}`}</ModalHeader>)}
+            {selectedItem?.eventType === "transfer" && (<ModalHeader>{`Transfer`}</ModalHeader>)}
+            {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer`}</ModalHeader>)}
+            {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered`}</ModalHeader>)}
+            {selectedItem?.eventType === "domainRenewal" && (<ModalHeader>{`Domain renewed`}</ModalHeader>)}
             <ModalCloseButton />
             <ModalBody>
             <ModalBodyData selectedItem={selectedItem}/>
           </ModalBody>
-            <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={onClose}>
-                Close
-              </Button>
-            </ModalFooter>
           </ModalContent>
         </Modal>
       </div>
