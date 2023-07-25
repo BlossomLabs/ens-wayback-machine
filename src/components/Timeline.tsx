@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box, Button, useDisclosure, } from '@chakra-ui/react';
+import { Flex, Box, Button, useDisclosure, IconButton, HStack, VStack, } from '@chakra-ui/react';
 import {
   Modal,
   ModalOverlay,
@@ -11,6 +11,8 @@ import {
 
 import { TimelineItem } from '@/utils/data-rendering/timelineItem';
 import { ModalBodyData } from '@/utils/data-rendering/modalBodyData';
+import { PlusIcon } from '@heroicons/react/24/outline';
+import { MinusIcon } from '@chakra-ui/icons';
 
 type TimelineData = {
   id: string;
@@ -71,8 +73,9 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
 
   return (
     <div>
-      <div>
+      <Flex>
         <Box
+          flex='1'
           position="relative"
           mx={8}
           mt={8}
@@ -98,13 +101,23 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
             ))}
           </Flex>
         </Box>
-      </div>
-      <Button onClick={handleZoomIn} disabled={zoom >= maxZoom}>
-        Zoom In
-      </Button>
-      <Button onClick={handleZoomOut} disabled={zoom <= minZoom}>
-        Zoom Out
-      </Button>
+      <VStack w="30px" mt={4}>
+        <IconButton
+          colorScheme='primary'
+          size={'xs'}
+          aria-label='Search database'
+          icon={<PlusIcon />}
+          onClick={handleZoomIn} disabled={zoom >= maxZoom}
+        />
+        <IconButton
+          colorScheme='primary'
+          size={'xs'}
+          aria-label='Search database'
+          icon={<MinusIcon />}
+          onClick={handleZoomOut} disabled={zoom <= minZoom}
+        />
+      </VStack>
+      </Flex>
       <div>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
