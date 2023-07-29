@@ -34,9 +34,12 @@ export const retrieveData = async (ens: string) => {
         const wrappedTransfers = result[2]
         const domainRenewals = result[3]
 
-        console.log(wrappedTransfers)
+        // Create expiry date
+        const expiryDate = [{
+            date: result[0].expiryDate,
+            eventType: 'domainExpiration'}]
 
-        return [...createdAtData, ...transfers, ...wrappedTransfers, ...domainRenewals]
+        return [...createdAtData, ...transfers, ...wrappedTransfers, ...domainRenewals, ...expiryDate]
     })
 
     return data

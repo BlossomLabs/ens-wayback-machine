@@ -28,15 +28,6 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                     <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
                 </Box>
                 <Box>
-                    <Text as="span" fontWeight="bold">Transaction: </Text>
-                    <Tooltip label={selectedItem.transactionID}>
-                        <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
-                            <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
-                            <ExternalLinkIcon mx='4px' />
-                        </Link>
-                    </Tooltip>
-                </Box>
-                <Box>
                     <Text as="span" fontWeight="bold">New owner: </Text>
                     <Tooltip label={selectedItem.owner.id}>
                         <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
@@ -112,6 +103,15 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                             <ExternalLinkIcon mx='4px' />
                         </Link>
                     </Tooltip>
+                </Box>
+            </div>
+        )
+    } else if (selectedItem?.eventType === "domainExpiration") {
+        return (
+            <div>
+                <Box marginBottom="2">
+                    <Text as="span" fontWeight="bold">Date: </Text>
+                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
                 </Box>
             </div>
         )

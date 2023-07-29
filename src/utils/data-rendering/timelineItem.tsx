@@ -128,6 +128,38 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
           </Flex>
         </Tooltip>
       );
+    } else if (eventType === "domainExpiration") { 
+      const today = new Date()
+      if(today > date) {
+        return(
+          <Tooltip
+          label={formattedDate}
+          hasArrow
+          placement={isActive ? "top" : "bottom"}
+          isOpen={!isInView ? false : isActive ? true : undefined}
+        >
+          <Flex
+            ref={ref}
+            direction="column"
+            alignItems="center"
+            onClick={onClick}
+            cursor="pointer"
+            mt={1}
+          >
+            <Circle size="32px" mx="3">
+              <Image
+                src={isActive ? "timeline-icons/domain-expired.svg" : "timeline-icons/domain-expired.svg"}
+                height={32}
+                width={32}
+                alt="Content upload"
+              />
+            </Circle>
+          </Flex>
+        </Tooltip>
+        )
+      } else {
+        return null 
+      }
     } else {
       return null
     }

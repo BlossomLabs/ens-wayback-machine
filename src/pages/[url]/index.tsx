@@ -75,8 +75,6 @@ export default function PageViewer() {
 
     let mergedData = [...data, ...snapshotsData]
 
-    console.log(mergedData)
-
     mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
 
     setTimelineData(mergedData)

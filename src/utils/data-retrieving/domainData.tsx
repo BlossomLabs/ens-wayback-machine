@@ -11,6 +11,7 @@ export const getDomainData = async (ens: string) => {
     `query GetDomainId($ens: String!){
       domains(where: {name: $ens}) {
         id,
+        expiryDate,
         createdAt,
         owner {
           id
@@ -24,12 +25,14 @@ export const getDomainData = async (ens: string) => {
     async (result: any) => {
       const ownerLookedUp = await ethereumProvider.lookupAddress(result.data.domains[0].owner.id);
       const registrarLookedUp = await ethereumProvider.lookupAddress(result.data.domains[0].owner.id);
+      
       return {
         domainId: result.data.domains[0]?.id,
         ownerId: result.data.domains[0]?.owner.id,
         registrantId: result.data.domains[0]?.registrant.id,
         ownerLookedUp: ownerLookedUp,
         registrarLookedUp: registrarLookedUp,
+        expiryDate: new Date (result.data.domains[0]?.expiryDate * 1000)
       };
     }
   );

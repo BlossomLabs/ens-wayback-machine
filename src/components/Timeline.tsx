@@ -73,6 +73,8 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
 
   const flexBasisValues = calculateFlexBasis(data);
 
+  console.log(data)
+
   return (
     <div>
       <Flex>
@@ -128,6 +130,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
             {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer`}</ModalHeader>)}
             {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered`}</ModalHeader>)}
             {selectedItem?.eventType === "domainRenewal" && (<ModalHeader>{`Domain renewed`}</ModalHeader>)}
+            {selectedItem?.eventType === "domainExpiration" && (<ModalHeader>{`Domain expired`}</ModalHeader>)}
             <ModalCloseButton />
             <ModalBody>
             <ModalBodyData selectedItem={selectedItem}/>
