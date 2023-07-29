@@ -1,21 +1,15 @@
 'use client';
-
-import { Card, Text, Input, InputGroup, InputLeftElement, Heading, Container, HStack } from "@chakra-ui/react"
-
 import { useEffect, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react"
 import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
 import Timeline from "../../components/Timeline";
-import { getDomainData } from "@/utils/data-retrieving/domainData";
 
 // Custom functions
-import { getWrappedTransfers } from "@/utils/data-retrieving/wrappedTransfers";
-import { getTransfers } from "@/utils/data-retrieving/transfers";
 import { getResolverId } from "@/utils/data-retrieving/resolverId";
 import { getContentHashes } from "@/utils/data-retrieving/contentHashes";
-import { getDomainRenewals } from "@/utils/data-retrieving/domainRenewal";
+import { retrieveData } from "@/utils/data-retrieving/retrieveData";
 
 // Pages
 import DomainUnavailableComponent from "../../components/DomainUnavailable";
@@ -28,38 +22,8 @@ export default function PageViewer() {
   const { url: _url } = useParams();
   const [loading, setLoading] = useState(true)
   const [resolverId, setResolverId] = useState('')
-  const [domainId, setDomainId] = useState('');
-  const [domainRegistrantId, setDomainRegistrantId] = useState('')
-  const [initialDomainOwnerId, setInitialDomainOwnerId] = useState('')
-  const [initialExpiryDate, setInitialExpiryDate] = useState(Date)
-  const [createdAtDate, setCreatedAtDate] = useState(Date)
-  const [ownerLookedUp, setOwnerLookedUp] = useState('')
-  const [registrarLookedUp, setRegistrarLookedUp] = useState('')
-  const [domainRenewals, setDomainRenewals] = useState<{
-    date: Date,
-    expiryDate: string,
-    transactionID: string,
-    eventType: string
-  }[]>([]);
-  const [wrappedTransfers, setWrappedTransfers] = useState<{
-    id: string;
-    transactionID: string;
-    blockNumber: number;
-    owner: object;
-    date: Date;
-    urlValue: string;
-    eventType: string;
-  }[]>([]);
 
-  const [transfers, setTransfers] = useState<{
-    id: string;
-    transactionID: string;
-    blockNumber: number;
-    owner: object;
-    date: Date;
-    urlValue: string;
-    eventType: string;
-  }[]>([]);
+  const [data, setData] = useState<any[]>([])
 
   const [timelineData, setTimelineData] = useState<any[]>([])
 
@@ -77,6 +41,9 @@ export default function PageViewer() {
             setLoading(false)
           }
         })
+        await retrieveData(_url).then((result) => {
+          setData(result)
+        })
       })();
     } 
   }, [_url])
@@ -92,40 +59,9 @@ export default function PageViewer() {
           }
           setLoading(false)
         })
-
-        // Get domainId
-        await getDomainData(_url).then((result) => {
-          setDomainId(result.domainId)
-          setInitialDomainOwnerId(result.ownerId)
-          setDomainRegistrantId(result.registrantId)
-          setOwnerLookedUp(result.ownerLookedUp)
-          setRegistrarLookedUp(result.registrarLookedUp)
-          setInitialExpiryDate(result[0].initialExpiryDate)
-          setCreatedAtDate(result[0].createdAt)
-        })
-
       })();
     }
-
-    if (domainId) {
-      (async () => {
-        // Get Wrapped Transfers
-        await getWrappedTransfers(domainId).then((result) => {
-          if (result) setWrappedTransfers(result)
-        })
-
-        // Get Transfers
-        await getTransfers(domainId).then((result) => {
-          if (result) setTransfers(result)
-        })
-
-        // Get Expiry Extensions (Domain renewal)
-        await getDomainRenewals(_url).then((result) => {
-          if (result) setDomainRenewals(result)
-        })
-      })();
-    }
-  }, [_url, domainId, resolverId]);
+  }, [_url, resolverId]);
 
   useEffect(() => {
     // Process snapshots data
@@ -135,23 +71,15 @@ export default function PageViewer() {
       eventType: hash ? "contentUpload" : null // remove those without hash (no new content)
     }));
 
-    const createdAtData: { date: Date, eventType: string, initialDomainOwner: string, domainRegistrantId: string, initialExpiryDate: Date, ownerLookedUp: string, registrarLookedUp: string }[] = [{
-      date: new Date(createdAtDate),
-      eventType: 'domainRegistration',
-      initialDomainOwner: initialDomainOwnerId,
-      domainRegistrantId: domainRegistrantId,
-      initialExpiryDate: new Date(initialExpiryDate),
-      ownerLookedUp: ownerLookedUp,
-      registrarLookedUp: registrarLookedUp
-    }]
+    let mergedData = [...data, ...snapshotsData]
 
-    let mergedData = [...createdAtData, ...snapshotsData, ...(wrappedTransfers || []), ...(transfers || []), ...(domainRenewals || [])]
+    console.log(mergedData)
 
     mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
 
     setTimelineData(mergedData)
 
-  }, [snapshots, wrappedTransfers, transfers, domainRenewals])
+  }, [snapshots, data])
 
   if (!resolverId && loading) {
     return (
