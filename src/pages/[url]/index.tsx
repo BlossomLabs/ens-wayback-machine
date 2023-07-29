@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Flex, Spinner, Text } from "@chakra-ui/react"
 import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
@@ -25,6 +25,7 @@ export default function PageViewer() {
 
   const [data, setData] = useState<any[]>([])
 
+  const [timelineLoader, setTimelineLoader] = useState(true)
   const [timelineData, setTimelineData] = useState<any[]>([])
 
   const handleSnapshotChange = (urlValue: string) => {
@@ -43,6 +44,7 @@ export default function PageViewer() {
         })
         await retrieveData(_url).then((result) => {
           setData(result)
+          setTimelineLoader(false)
         })
       })();
     } 
@@ -79,7 +81,7 @@ export default function PageViewer() {
 
     setTimelineData(mergedData)
 
-  }, [snapshots, data])
+  }, [data])
 
   if (!resolverId && loading) {
     return (
@@ -120,7 +122,16 @@ export default function PageViewer() {
               </Link>
             </Box>
             <Box width="100%">
-              <Timeline data={timelineData} onItemSelected={handleSnapshotChange} activeItem={url} />
+              {
+                timelineLoader ? (
+                  <Flex justifyContent="center" alignItems="center">
+                    <Text fontSize="xl" marginX="2">Loading timeline...</Text>
+                    <Spinner size="lg" marginX="2"/>
+                  </Flex>
+                ) : (
+                  <Timeline data={timelineData} onItemSelected={handleSnapshotChange} activeItem={url} />
+                )
+              }
             </Box>
           </Flex>
           <iframe width="100%" style={{ minHeight: "100vh", border: 0 }} src={url ? url : ''} />
@@ -128,6 +139,6 @@ export default function PageViewer() {
       </Box>
     );
   } else {
-    return null
+    return <LoadingContentComponent />
   }
 }
