@@ -27,7 +27,9 @@ type TimelineData = {
   initialExpiryDate: Date,
   expiryDate: number,
   ownerLookedUp: string,
-  registrarLookedUp: string
+  registrarLookedUp: string,
+  from: string,
+  fromLookedUp: string
 };
 
 type TimelineProps = {
@@ -72,8 +74,6 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   };
 
   const flexBasisValues = calculateFlexBasis(data);
-
-  console.log(data)
 
   return (
     <div>

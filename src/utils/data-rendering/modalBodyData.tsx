@@ -15,7 +15,9 @@ type ModalData = {
     initialExpiryDate: Date,
     expiryDate: number,
     ownerLookedUp: string,
-    registrarLookedUp: string
+    registrarLookedUp: string,
+    from: string,
+    fromLookedUp: string
 }
 
 export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
@@ -27,7 +29,7 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                     <Text as="span" fontWeight="bold">Date: </Text>
                     <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
                 </Box>
-                <Box>
+                <Box marginBottom="2">
                     <Text as="span" fontWeight="bold">New owner: </Text>
                     <Tooltip label={selectedItem.owner.id}>
                         <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
@@ -61,22 +63,22 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                             {selectedItem.ownerLookedUp && (
                                 <Text as="span" fontWeight="normal">{selectedItem.ownerLookedUp}</Text>
                             )}
-                             {!selectedItem.ownerLookedUp && (
-                            <Text as="span" fontWeight="normal">{selectedItem.initialDomainOwner.slice(0, 6) + '...' + selectedItem.initialDomainOwner.slice(-4)}</Text>
-                             )}
+                            {!selectedItem.ownerLookedUp && (
+                                <Text as="span" fontWeight="normal">{selectedItem.initialDomainOwner.slice(0, 6) + '...' + selectedItem.initialDomainOwner.slice(-4)}</Text>
+                            )}
                             <ExternalLinkIcon mx='4px' />
                         </Link>
                     </Tooltip>
                 </Box>
-                <Box>
+                <Box marginBottom="2">
                     <Text as="span" fontWeight="bold">Domain registrant: </Text>
                     <Tooltip label={selectedItem.domainRegistrantId}>
                         <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
                             {selectedItem.registrarLookedUp && (
-                            <Text as="span" fontWeight="normal">{selectedItem.registrarLookedUp}</Text>
+                                <Text as="span" fontWeight="normal">{selectedItem.registrarLookedUp}</Text>
                             )}
                             {!selectedItem.registrarLookedUp && (
-                            <Text as="span" fontWeight="normal">{selectedItem.domainRegistrantId.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
+                                <Text as="span" fontWeight="normal">{selectedItem.domainRegistrantId.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
                             )}
                             <ExternalLinkIcon mx='4px' />
                         </Link>
@@ -104,6 +106,18 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
                         </Link>
                     </Tooltip>
                 </Box>
+                <Box marginBottom="2">
+                    <Text as="span" fontWeight="bold">Transaction from: </Text>
+                    <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
+                        {selectedItem.fromLookedUp && (
+                            <Text as="span" fontWeight="normal">{selectedItem.fromLookedUp}</Text>
+                        )}
+                        {!selectedItem.fromLookedUp && (
+                            <Text as="span" fontWeight="normal">{selectedItem.from.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
+                        )}
+                        <ExternalLinkIcon mx='4px' />
+                    </Link>
+                </Box>
             </div>
         )
     } else if (selectedItem?.eventType === "domainExpiration") {
@@ -116,6 +130,6 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
             </div>
         )
     } else {
-        return null 
+        return null
     }
 }

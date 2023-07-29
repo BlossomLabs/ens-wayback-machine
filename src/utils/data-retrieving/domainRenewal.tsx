@@ -27,7 +27,10 @@ export const getDomainRenewals = async (ens: any) => {
                 // Obtain block timestamp and add event type
                 const processedExpiryExtendeds = await Promise.all(filtereDomainRenewals.map(async (obj: any) => {
                     const block = await ethereumProvider.getBlock(obj.blockNumber);
-                    return { ...obj, date: new Date(block.timestamp * 1000), eventType: "domainRenewal" }
+                    const from = (await ethereumProvider.getTransaction(obj.transactionID)).from
+                    const fromLookedUp = await ethereumProvider.lookupAddress(from);
+
+                    return { ...obj, date: new Date(block.timestamp * 1000), eventType: "domainRenewal", from: from, fromLookedUp: fromLookedUp}
                 }));
 
                 // Return the array with the domain renewal events
