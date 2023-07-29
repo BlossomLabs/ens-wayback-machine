@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box, Button, useDisclosure, IconButton, HStack, VStack, } from '@chakra-ui/react';
+import { Flex, Box, useDisclosure, IconButton, VStack, } from '@chakra-ui/react';
 import {
   Modal,
   ModalOverlay,
