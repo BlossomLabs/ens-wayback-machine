@@ -116,6 +116,6 @@ export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
             </div>
         )
     } else {
-        return null
+        return null 
     }
 }

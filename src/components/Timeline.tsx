@@ -15,17 +15,19 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { MinusIcon } from '@chakra-ui/icons';
 
 type TimelineData = {
-  id: string;
-  date: Date;
-  urlValue: string;
-  eventType: string;
-  blockNumber: number;
-  owner: {id: string};
-  transactionID: string;
-  initialDomainOwner: string;
-  domainRegistrantId: string;
-  expiryDate: number;
-
+  id: string,
+  date: Date,
+  urlValue: string,
+  eventType: string,
+  blockNumber: number,
+  transactionID: string,
+  owner: { id: string },
+  initialDomainOwner: string,
+  domainRegistrantId: string,
+  initialExpiryDate: Date,
+  expiryDate: number,
+  ownerLookedUp: string,
+  registrarLookedUp: string
 };
 
 type TimelineProps = {
