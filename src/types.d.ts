@@ -4,3 +4,7 @@ declare module 'content-hash' {
     cidV0ToV1Base32: (ipfsv0: string) => string,
   }
 }
+
+declare module 'eth-ens-namehash' {
+  export const hash: (ens: string) => string;
+}
