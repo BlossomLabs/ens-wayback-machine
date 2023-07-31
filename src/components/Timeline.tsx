@@ -83,7 +83,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
           position="relative"
           mx={8}
           mt={8}
-          style={{ overflowX: "scroll", scrollbarWidth: "none", msOverflowStyle: "none" }}
+          style={{ overflowX: "scroll" }}
           className="hide-scrollbar"
           backgroundImage="linear-gradient(to right, primary.900 0%, primary.900 100%)"
           backgroundSize="100% 3px"
