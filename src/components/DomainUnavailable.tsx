@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 
 export default function DomainUnavailableComponent () {
-    return (
-        <>
+  return (
+    <>
       <Flex
         minHeight="100vh"
         align="center"
@@ -27,13 +27,13 @@ export default function DomainUnavailableComponent () {
               This domain is not available, please, go back and try again.
             </Text>
             <Link to={'/'}>
-            <Text textAlign="center" fontWeight="bold" mt={8} fontSize={"32px"}>
+              <Text textAlign="center" fontWeight="bold" mt={8} fontSize={"32px"}>
               Click here to go back
-            </Text>
+              </Text>
             </Link>
-            </Box>
+          </Box>
         </Container>
       </Flex>
-      </>
-    )
+    </>
+  )
 }

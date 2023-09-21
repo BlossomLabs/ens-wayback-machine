@@ -58,7 +58,7 @@ export default function PageViewer() {
           setTimelineLoader(false)
         })
       })();
-    } 
+    }
   }, [_url])
 
   useEffect(() => {

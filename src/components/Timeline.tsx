@@ -126,22 +126,22 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
             ))}
           </Flex>
         </Box>
-      <VStack w="30px" mt={4}>
-        <IconButton
-          colorScheme='primary'
-          size={'xs'}
-          aria-label='Zoom in'
-          icon={<PlusIcon />}
-          onClick={handleZoomIn} disabled={zoom >= maxZoom}
-        />
-        <IconButton
-          colorScheme='primary'
-          size={'xs'}
-          aria-label='Zoom out'
-          icon={<MinusIcon />}
-          onClick={handleZoomOut} disabled={zoom <= minZoom}
-        />
-      </VStack>
+        <VStack w="30px" mt={4}>
+          <IconButton
+            colorScheme='primary'
+            size={'xs'}
+            aria-label='Zoom in'
+            icon={<PlusIcon />}
+            onClick={handleZoomIn} disabled={zoom >= maxZoom}
+          />
+          <IconButton
+            colorScheme='primary'
+            size={'xs'}
+            aria-label='Zoom out'
+            icon={<MinusIcon />}
+            onClick={handleZoomOut} disabled={zoom <= minZoom}
+          />
+        </VStack>
       </Flex>
       <div>
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -154,8 +154,8 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
             {selectedItem?.eventType === "domainExpiration" && (<ModalHeader>{`Domain expired`}</ModalHeader>)}
             <ModalCloseButton />
             <ModalBody>
-            <ModalBodyData selectedItem={selectedItem}/>
-          </ModalBody>
+              <ModalBodyData selectedItem={selectedItem}/>
+            </ModalBody>
           </ModalContent>
         </Modal>
       </div>

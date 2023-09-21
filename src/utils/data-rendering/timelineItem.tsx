@@ -13,126 +13,126 @@ type TimelineItemProps = {
   };
 
 export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineItemProps) => {
-    const [ref, isInView] = useIsInView();
-    const formattedDate = date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  
-    if (eventType === "domainRegistration") {
-      return (
-        <Tooltip
-          label={formattedDate}
-          hasArrow
-          placement={isActive ? "top" : "bottom"}
-          isOpen={!isInView ? false : isActive ? true : undefined}
+  const [ref, isInView] = useIsInView();
+  const formattedDate = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (eventType === "domainRegistration") {
+    return (
+      <Tooltip
+        label={formattedDate}
+        hasArrow
+        placement={isActive ? "top" : "bottom"}
+        isOpen={!isInView ? false : isActive ? true : undefined}
+      >
+        <Flex
+          ref={ref}
+          direction="column"
+          alignItems="center"
+          onClick={onClick}
+          cursor="pointer"
+          mt={1}
         >
-          <Flex
-            ref={ref}
-            direction="column"
-            alignItems="center"
-            onClick={onClick}
-            cursor="pointer"
-            mt={1}
-          >
-            <Circle size="32px" mx="3">
-              <Image
-                src={isActive ? "timeline-icons/first-event.svg" : "timeline-icons/first-event.svg"}
-                height={32}
-                width={32}
-                alt="First event"
-              />
-            </Circle>
-          </Flex>
-        </Tooltip>
-      );
-    } else if (eventType === "domainRenewal") {
-      return (
-        <Tooltip
-          label={formattedDate}
-          hasArrow
-          placement={isActive ? "top" : "bottom"}
-          isOpen={!isInView ? false : isActive ? true : undefined}
+          <Circle size="32px" mx="3">
+            <Image
+              src={isActive ? "timeline-icons/first-event.svg" : "timeline-icons/first-event.svg"}
+              height={32}
+              width={32}
+              alt="First event"
+            />
+          </Circle>
+        </Flex>
+      </Tooltip>
+    );
+  } else if (eventType === "domainRenewal") {
+    return (
+      <Tooltip
+        label={formattedDate}
+        hasArrow
+        placement={isActive ? "top" : "bottom"}
+        isOpen={!isInView ? false : isActive ? true : undefined}
+      >
+        <Flex
+          ref={ref}
+          direction="column"
+          alignItems="center"
+          onClick={onClick}
+          cursor="pointer"
+          mt={1}
         >
-          <Flex
-            ref={ref}
-            direction="column"
-            alignItems="center"
-            onClick={onClick}
-            cursor="pointer"
-            mt={1}
-          >
-            <Circle size="32px" mx="3">
-              <Image
-                src={isActive ? "timeline-icons/domain-renewal.svg" : "timeline-icons/domain-renewal.svg"}
-                height={32}
-                width={32}
-                alt="First event"
-              />
-            </Circle>
-          </Flex>
-        </Tooltip>
-      );
-    } else if (eventType === "wrappedTransfer") {
-      return (
-        <Tooltip
-          label={formattedDate}
-          hasArrow
-          placement={isActive ? "top" : "bottom"}
-          isOpen={!isInView ? false : isActive ? true : undefined}
+          <Circle size="32px" mx="3">
+            <Image
+              src={isActive ? "timeline-icons/domain-renewal.svg" : "timeline-icons/domain-renewal.svg"}
+              height={32}
+              width={32}
+              alt="First event"
+            />
+          </Circle>
+        </Flex>
+      </Tooltip>
+    );
+  } else if (eventType === "wrappedTransfer") {
+    return (
+      <Tooltip
+        label={formattedDate}
+        hasArrow
+        placement={isActive ? "top" : "bottom"}
+        isOpen={!isInView ? false : isActive ? true : undefined}
+      >
+        <Flex
+          ref={ref}
+          direction="column"
+          alignItems="center"
+          onClick={onClick}
+          cursor="pointer"
+          mt={1}
         >
-          <Flex
-            ref={ref}
-            direction="column"
-            alignItems="center"
-            onClick={onClick}
-            cursor="pointer"
-            mt={1}
-          >
-            <Circle size="32px" mx="3">
-              <Image
-                src={isActive ? "timeline-icons/new-owner.svg" : "timeline-icons/new-owner.svg"}
-                height={32}
-                width={32}
-                alt="First event"
-              />
-            </Circle>
-          </Flex>
-        </Tooltip>
-      );
-    } else if (eventType === "contentUpload") {
-      return (
-        <Tooltip
-          label={formattedDate}
-          hasArrow
-          placement={isActive ? "top" : "bottom"}
-          isOpen={!isInView ? false : isActive ? true : undefined}
+          <Circle size="32px" mx="3">
+            <Image
+              src={isActive ? "timeline-icons/new-owner.svg" : "timeline-icons/new-owner.svg"}
+              height={32}
+              width={32}
+              alt="First event"
+            />
+          </Circle>
+        </Flex>
+      </Tooltip>
+    );
+  } else if (eventType === "contentUpload") {
+    return (
+      <Tooltip
+        label={formattedDate}
+        hasArrow
+        placement={isActive ? "top" : "bottom"}
+        isOpen={!isInView ? false : isActive ? true : undefined}
+      >
+        <Flex
+          ref={ref}
+          direction="column"
+          alignItems="center"
+          onClick={onClick}
+          cursor="pointer"
+          mt={1}
         >
-          <Flex
-            ref={ref}
-            direction="column"
-            alignItems="center"
-            onClick={onClick}
-            cursor="pointer"
-            mt={1}
-          >
-            <Circle size="32px" mx="3">
-              <Image
-                src={isActive ? "timeline-icons/content-upload.svg" : "timeline-icons/content-upload.svg"}
-                height={32}
-                width={32}
-                alt="Content upload"
-              />
-            </Circle>
-          </Flex>
-        </Tooltip>
-      );
-    } else if (eventType === "domainExpiration") { 
-      const today = new Date()
-      if(today > date) {
-        return(
-          <Tooltip
+          <Circle size="32px" mx="3">
+            <Image
+              src={isActive ? "timeline-icons/content-upload.svg" : "timeline-icons/content-upload.svg"}
+              height={32}
+              width={32}
+              alt="Content upload"
+            />
+          </Circle>
+        </Flex>
+      </Tooltip>
+    );
+  } else if (eventType === "domainExpiration") {
+    const today = new Date()
+    if(today > date) {
+      return(
+        <Tooltip
           label={formattedDate}
           hasArrow
           placement={isActive ? "top" : "bottom"}
@@ -156,11 +156,11 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
             </Circle>
           </Flex>
         </Tooltip>
-        )
-      } else {
-        return null 
-      }
+      )
     } else {
       return null
     }
-  };
+  } else {
+    return null
+  }
+};

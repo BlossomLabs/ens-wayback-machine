@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 
 export default function ContentUnavailableComponent () {
-    return (
-        <>
+  return (
+    <>
       <Flex
         minHeight="100vh"
         align="center"
@@ -27,13 +27,13 @@ export default function ContentUnavailableComponent () {
               This domain has no content hashes available, go back and try again.
             </Text>
             <Link to={'/'}>
-            <Text textAlign="center" fontWeight="bold" mt={8} fontSize={"32px"}>
+              <Text textAlign="center" fontWeight="bold" mt={8} fontSize={"32px"}>
               Click here to go back
-            </Text>
+              </Text>
             </Link>
-            </Box>
+          </Box>
         </Container>
       </Flex>
-      </>
-    )
+    </>
+  )
 }

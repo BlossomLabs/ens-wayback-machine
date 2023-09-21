@@ -46,7 +46,7 @@ export default function Home() {
                 <InputLeftElement pointerEvents='none'>
                   <SearchIcon color='black' />
                 </InputLeftElement>
-                <Input 
+                <Input
                   value={url}
                   autoFocus
                   onChange={(event) => setUrl(event.target.value)}
