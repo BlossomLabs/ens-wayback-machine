@@ -73,6 +73,25 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
     });
   };
 
+  // Add a dummy item to the end of the timeline to see how much time passes between the last item and now
+  data = [...data, {
+    id: "",
+    date: new Date(),
+    urlValue: "",
+    eventType: "",
+    blockNumber: 0,
+    transactionID: "",
+    owner: { id: "" },
+    initialDomainOwner: "",
+    domainRegistrantId: "",
+    initialExpiryDate: new Date(),
+    expiryDate: new Date().getTime(),
+    ownerLookedUp: "",
+    registrarLookedUp: "",
+    from: "",
+    fromLookedUp: ""
+  }]
+
   const flexBasisValues = calculateFlexBasis(data);
 
   return (
@@ -93,15 +112,17 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
         >
           <Flex position="absolute" justifyContent="space-between" width={`${100 * zoom}%`} transformOrigin="left">
             {data.map((item, index) => (
-              <Flex flexBasis={flexBasisValues[index]} key={index}>
-                <TimelineItem
-                  date={item.date}
-                  urlValue={item.urlValue}
-                  eventType={item.eventType}
-                  isActive={item.urlValue === activeItem}
-                  onClick={() => handleItemClick(item.urlValue, item.eventType, item)}
-                />
-              </Flex>
+              item.date <= new Date() && (
+                <Flex flexBasis={flexBasisValues[index]} key={item.date.toString()}>
+                  <TimelineItem
+                    date={item.date}
+                    urlValue={item.urlValue}
+                    eventType={item.eventType}
+                    isActive={item.urlValue === activeItem}
+                    onClick={() => handleItemClick(item.urlValue, item.eventType, item)}
+                  />
+                </Flex>
+              )
             ))}
           </Flex>
         </Box>
@@ -109,14 +130,14 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
         <IconButton
           colorScheme='primary'
           size={'xs'}
-          aria-label='Search database'
+          aria-label='Zoom in'
           icon={<PlusIcon />}
           onClick={handleZoomIn} disabled={zoom >= maxZoom}
         />
         <IconButton
           colorScheme='primary'
           size={'xs'}
-          aria-label='Search database'
+          aria-label='Zoom out'
           icon={<MinusIcon />}
           onClick={handleZoomOut} disabled={zoom <= minZoom}
         />

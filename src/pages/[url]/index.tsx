@@ -24,9 +24,20 @@ export default function PageViewer() {
   const [resolverId, setResolverId] = useState('')
 
   const [data, setData] = useState<any[]>([])
-
   const [timelineLoader, setTimelineLoader] = useState(true)
-  const [timelineData, setTimelineData] = useState<any[]>([])
+
+  // Process snapshots data
+  const snapshotsData: any[] = snapshots.map(({ date, hash }) => ({
+    date: new Date(date * 1000),
+    urlValue: hash,
+    eventType: hash ? "contentUpload" : null // remove those without hash (no new content)
+  }));
+
+  let mergedData = [...data, ...snapshotsData]
+
+  mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  const timelineData = (mergedData)
 
   const handleSnapshotChange = (urlValue: string) => {
     setUrl(urlValue);
@@ -64,22 +75,6 @@ export default function PageViewer() {
       })();
     }
   }, [_url, resolverId]);
-
-  useEffect(() => {
-    // Process snapshots data
-    const snapshotsData: any[] = snapshots.map(({ date, hash }) => ({
-      date: new Date(date * 1000),
-      urlValue: hash,
-      eventType: hash ? "contentUpload" : null // remove those without hash (no new content)
-    }));
-
-    let mergedData = [...data, ...snapshotsData]
-
-    mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-    setTimelineData(mergedData)
-
-  }, [data])
 
   if (!resolverId && loading) {
     return (
