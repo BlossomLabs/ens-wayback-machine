@@ -19,6 +19,8 @@ export const retrieveData = async (ens: string) => {
 
     const result = await Promise.all(promises)
 
+    if (result[0][0] === undefined) return []
+
     // Process createdAtData
     const createdAtData = [{
         date: new Date(result[0][0].createdAt),

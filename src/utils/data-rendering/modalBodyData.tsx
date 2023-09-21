@@ -20,113 +20,95 @@ type ModalData = {
     fromLookedUp: string
 }
 
-export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
+type BaseBoxProps = {
+    label: string,
+    text: string,
+    fullText: string,
+    link?: string
+}
 
+type AddressBoxProps = {
+    label: string,
+    address: string,
+    ens?: string
+}
+
+type TransactionBoxProps = {
+    label: string,
+    transactionID: string
+}
+
+type DateBoxProps = {
+    label: string,
+    date: Date
+}
+
+function BaseBox({ label, text, fullText, link }: BaseBoxProps) {
+    return (
+        <Box marginBottom="2">
+            <Text as="span" fontWeight="bold">{label}: </Text>
+            {link ? (
+                <Tooltip label={fullText}>
+                    <Link href={link} isExternal>
+                        {text}
+                        <ExternalLinkIcon mx='4px' />
+                    </Link>
+                </Tooltip>
+            ) : (
+                <Text as="span" fontWeight="normal">{text}</Text>
+            )}
+        </Box>
+    )
+}
+
+function AddressBox({ label, address, ens }: AddressBoxProps) {
+    return (
+        <BaseBox label={label} text={ens || address.slice(0, 6) + '...' + address.slice(-4)} fullText={address} link={`https://etherscan.io/address/${address}`} />
+    )
+}
+
+function TransactionBox({ label, transactionID }: TransactionBoxProps) {
+    return (
+        <BaseBox label={label} text={transactionID.slice(0, 6) + '...' + transactionID.slice(-4)} fullText={transactionID} link={`https://etherscan.io/tx/${transactionID}`} />
+    )
+}
+
+function DateBox({ label, date }: DateBoxProps) {
+    return (
+        <BaseBox label={label} text={date.toLocaleString('en-GB', {month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })} fullText="" />
+    )
+}
+
+export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
     if (selectedItem?.eventType === "transfer" || selectedItem?.eventType === "wrappedTransfer") {
         return (
             <div>
-                <Box>
-                    <Text as="span" fontWeight="bold">Date: </Text>
-                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                </Box>
-                <Box marginBottom="2">
-                    <Text as="span" fontWeight="bold">New owner: </Text>
-                    <Tooltip label={selectedItem.owner.id}>
-                        <Link href={`https://etherscan.io/address/${selectedItem.owner.id}`} isExternal>
-                            {selectedItem.ownerLookedUp && (
-                                <Text as="span" fontWeight="normal">{selectedItem.ownerLookedUp}</Text>
-                            )}
-                            {!selectedItem.ownerLookedUp && (
-                                <Text as="span" fontWeight="normal">{selectedItem.owner.id.slice(0, 6) + '...' + selectedItem.owner.id.slice(-4)}</Text>
-                            )}
-                            <ExternalLinkIcon mx='4px' />
-                        </Link>
-                    </Tooltip>
-                </Box>
+                <DateBox label="Date" date={selectedItem.date} />
+                <AddressBox label="New owner" address={selectedItem.owner.id} ens={selectedItem.ownerLookedUp} />
             </div>
         )
     } else if (selectedItem?.eventType === "domainRegistration") {
         return (
             <div>
-                <Box>
-                    <Text as="span" fontWeight="bold">Date: </Text>
-                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                </Box>
-                <Box>
-                    <Text as="span" fontWeight="bold">Domain expiration: </Text>
-                    <Text as="span" fontWeight="normal">{selectedItem.initialExpiryDate.toDateString()}</Text>
-                </Box>
-                <Box>
-                    <Text as="span" fontWeight="bold">Domain owner: </Text>
-                    <Tooltip label={selectedItem.initialDomainOwner}>
-                        <Link href={`https://etherscan.io/address/${selectedItem.initialDomainOwner}`} isExternal>
-                            {selectedItem.ownerLookedUp && (
-                                <Text as="span" fontWeight="normal">{selectedItem.ownerLookedUp}</Text>
-                            )}
-                            {!selectedItem.ownerLookedUp && (
-                                <Text as="span" fontWeight="normal">{selectedItem.initialDomainOwner.slice(0, 6) + '...' + selectedItem.initialDomainOwner.slice(-4)}</Text>
-                            )}
-                            <ExternalLinkIcon mx='4px' />
-                        </Link>
-                    </Tooltip>
-                </Box>
-                <Box marginBottom="2">
-                    <Text as="span" fontWeight="bold">Domain registrant: </Text>
-                    <Tooltip label={selectedItem.domainRegistrantId}>
-                        <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
-                            {selectedItem.registrarLookedUp && (
-                                <Text as="span" fontWeight="normal">{selectedItem.registrarLookedUp}</Text>
-                            )}
-                            {!selectedItem.registrarLookedUp && (
-                                <Text as="span" fontWeight="normal">{selectedItem.domainRegistrantId.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
-                            )}
-                            <ExternalLinkIcon mx='4px' />
-                        </Link>
-                    </Tooltip>
-                </Box>
+                <DateBox label="Date" date={selectedItem.date} />
+                <DateBox label="Domain expiration" date={selectedItem.initialExpiryDate} />
+                <AddressBox label="Domain owner" address={selectedItem.initialDomainOwner} ens={selectedItem.ownerLookedUp} />
+                <AddressBox label="Domain registrant" address={selectedItem.domainRegistrantId} ens={selectedItem.registrarLookedUp} />
             </div>
         )
     } else if (selectedItem?.eventType === "domainRenewal") {
         return (
             <div>
-                <Box>
-                    <Text as="span" fontWeight="bold">Date: </Text>
-                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                </Box>
-                <Box>
-                    <Text as="span" fontWeight="bold">New expiry date: </Text>
-                    <Text as="span" fontWeight="normal">{new Date(selectedItem.expiryDate * 1000).toDateString()}</Text>
-                </Box>
-                <Box>
-                    <Text as="span" fontWeight="bold">Transaction: </Text>
-                    <Tooltip label={selectedItem.transactionID}>
-                        <Link href={`https://etherscan.io/tx/${selectedItem.transactionID}`} isExternal>
-                            <Text as="span" fontWeight="normal">{selectedItem.transactionID.slice(0, 6) + '...' + selectedItem.transactionID.slice(-4)}</Text>
-                            <ExternalLinkIcon mx='4px' />
-                        </Link>
-                    </Tooltip>
-                </Box>
-                <Box marginBottom="2">
-                    <Text as="span" fontWeight="bold">Transaction from: </Text>
-                    <Link href={`https://etherscan.io/address/${selectedItem.domainRegistrantId}`} isExternal>
-                        {selectedItem.fromLookedUp && (
-                            <Text as="span" fontWeight="normal">{selectedItem.fromLookedUp}</Text>
-                        )}
-                        {!selectedItem.fromLookedUp && (
-                            <Text as="span" fontWeight="normal">{selectedItem.from.slice(0, 6) + '...' + selectedItem.domainRegistrantId.slice(-4)}</Text>
-                        )}
-                        <ExternalLinkIcon mx='4px' />
-                    </Link>
-                </Box>
+                <DateBox label="Date" date={selectedItem.date} />
+                <DateBox label="New expiry date" date={new Date(selectedItem.expiryDate * 1000)} />
+                <TransactionBox label="Transaction" transactionID={selectedItem.transactionID} />
+                <AddressBox label="From" address={selectedItem.from} ens={selectedItem.fromLookedUp} />
             </div>
         )
     } else if (selectedItem?.eventType === "domainExpiration") {
         return (
             <div>
-                <Box marginBottom="2">
-                    <Text as="span" fontWeight="bold">Date: </Text>
-                    <Text as="span" fontWeight="normal">{selectedItem.date.toDateString()}</Text>
-                </Box>
+                <DateBox label="Date" date={selectedItem.date} />
             </div>
         )
     } else {
