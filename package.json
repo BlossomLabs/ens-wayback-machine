@@ -1,39 +1,24 @@
 {
-  "name": "ens-wayback-machine",
-  "version": "0.1.0",
+  "name": "wayback-machine-monorepo",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "dependencies": {
-    "@chakra-ui/anatomy": "^2.1.1",
-    "@chakra-ui/icons": "^2.0.18",
-    "@chakra-ui/next-js": "^2.1.2",
-    "@chakra-ui/react": "^2.5.5",
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
-    "@ethersproject/basex": "^5.7.0",
-    "@ethersproject/providers": "^5.7.2",
-    "@ethersproject/strings": "^5.7.0",
-    "@fontsource/edu-qld-beginner": "^4.5.4",
-    "@fontsource/megrim": "^4.5.11",
-    "@heroicons/react": "^2.0.17",
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.31",
-    "@types/react-dom": "18.0.11",
-    "content-hash": "^2.5.2",
-    "eslint": "8.37.0",
-    "eslint-config-next": "13.2.4",
-    "eth-ens-namehash": "^2.0.8",
-    "framer-motion": "^10.10.0",
-    "next": "13.2.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-router-dom": "^6.10.0",
-    "typescript": "5.0.3"
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "prettier": "^3.1.0",
+    "turbo": "latest"
   },
-  "license": "AGPL-3.0-or-later"
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.0.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

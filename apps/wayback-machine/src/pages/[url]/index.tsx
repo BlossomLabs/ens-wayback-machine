@@ -4,7 +4,7 @@ import { Box, Flex, Spinner, Text } from "@chakra-ui/react"
 import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
-import Timeline from "../../components/Timeline";
+import Timeline from "@/components/Timeline";
 
 // Custom functions
 import { getResolverId } from "@/utils/data-retrieving/resolverId";
@@ -12,7 +12,7 @@ import { getContentHashes } from "@/utils/data-retrieving/contentHashes";
 import { retrieveData } from "@/utils/data-retrieving/retrieveData";
 
 // Pages
-import DomainUnavailableComponent from "../../components/DomainUnavailable";
+import DomainUnavailableComponent from "@/components/DomainUnavailable";
 import LoadingContentComponent from "@/components/LoadingContent";
 import ContentUnavailableComponent from "@/components/ContentUnavailable";
 

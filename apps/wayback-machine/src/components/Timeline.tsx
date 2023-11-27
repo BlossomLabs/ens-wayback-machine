@@ -63,12 +63,12 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
     if (data.length === 0) return [];
     if (data.length === 1) return ['100%'];
 
-    const totalTime = data[data.length - 1].date.getTime() - data[0].date.getTime();
+    const totalTime = data[data.length - 1]!.date.getTime() - data[0]!.date.getTime();
 
     return data.map((item: TimelineData, index: number) => {
       if (index === 0) return '0%';
       const prevItem = data[index - 1];
-      const interval = item.date.getTime() - prevItem.date.getTime();
+      const interval = item.date.getTime() - prevItem!.date.getTime();
       return `${(interval / totalTime) * 100 * zoom}%`;
     });
   };

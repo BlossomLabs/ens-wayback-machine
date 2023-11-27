@@ -26,4 +26,4 @@ This project is in a very early stage. As next steps, we would like to improve t
 
 ## License
 
-This project is licensed under the [AGPLv3 License](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
