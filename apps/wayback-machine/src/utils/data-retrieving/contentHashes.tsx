@@ -19,7 +19,7 @@ function decode(encoded: string) {
     }
   }
   const ipfsv1 = contentHash.helpers.cidV0ToV1Base32(ipfsv0)
-  return `https://${ipfsv1}.ipfs.dweb.link/`
+  return `https://${ipfsv1}.ipfs.ens.site/`
 }
 
 const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
