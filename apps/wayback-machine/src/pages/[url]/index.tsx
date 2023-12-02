@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
-import { Box, Flex, Spinner, Text } from "@chakra-ui/react"
+import { Box, Flex, Spinner, Text, useBreakpointValue } from "@chakra-ui/react"
 import { Link, useParams } from "react-router-dom";
 import Image from 'next/image';
 
@@ -16,6 +16,38 @@ import DomainUnavailableComponent from "@/components/DomainUnavailable";
 import LoadingContentComponent from "@/components/LoadingContent";
 import ContentUnavailableComponent from "@/components/ContentUnavailable";
 
+function Header({ timeline }: { timeline: React.ReactElement | false }) {
+  return (
+    <Flex
+      px='30px'
+      pt='15px'
+      alignItems="center"
+      direction={['column', 'column', 'row']}
+    >
+      <Box minWidth="120px">
+        <Link to='/'>
+          <Box mb={5}>
+            <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
+          </Box>
+        </Link>
+      </Box>
+      <Box width="100%">
+        {
+          !timeline ? (
+            <Flex justifyContent="center" alignItems="center">
+              <Text fontSize="xl" marginX="2">Loading timeline...</Text>
+              <Spinner size="lg" marginX="2" />
+            </Flex>
+          ) : (
+            timeline
+          )
+        }
+      </Box>
+    </Flex>
+
+  )
+}
+
 export default function PageViewer() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>([]);
   const [url, setUrl] = useState('');
@@ -25,6 +57,8 @@ export default function PageViewer() {
 
   const [data, setData] = useState<any[]>([])
   const [timelineLoader, setTimelineLoader] = useState(true)
+  const headerHeight = useBreakpointValue({ base: '230px', md: '130px' })
+  const iframeMinHeight = useBreakpointValue({ base: 'calc(100vh - 230px)', md: 'calc(100vh - 130px)' })
 
   // Process snapshots data
   const snapshotsData: any[] = snapshots.map(({ date, hash }) => ({
@@ -66,7 +100,7 @@ export default function PageViewer() {
       (async () => {
         // Get content
         await getContentHashes(resolverId).then((result) => {
-          if(result) {
+          if (result) {
             setSnapshots(result.decodedWithDate)
             setUrl(result.url)
           }
@@ -97,37 +131,14 @@ export default function PageViewer() {
   } else if (snapshots.length > 0) {
     return (
       <Box
-        position={'relative'}
-      >
-        <Box
-          bg='primary.100'>
-          <Flex
-            px='30px'
-            pt='15px'
-            alignItems="center"
-            direction={['column', 'column', 'row']}
-          >
-            <Box minWidth="120px">
-              <Link to='/'>
-                <Box mb={5}>
-                  <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
-                </Box>
-              </Link>
-            </Box>
-            <Box width="100%">
-              {
-                timelineLoader ? (
-                  <Flex justifyContent="center" alignItems="center">
-                    <Text fontSize="xl" marginX="2">Loading timeline...</Text>
-                    <Spinner size="lg" marginX="2"/>
-                  </Flex>
-                ) : (
-                  <Timeline data={timelineData} onItemSelected={handleSnapshotChange} activeItem={url} />
-                )
-              }
-            </Box>
-          </Flex>
-          <iframe width="100%" style={{ minHeight: "100vh", border: 0 }} src={url ? url : ''} />
+        bg='primary.100'>
+        <Box minHeight={headerHeight} maxHeight={headerHeight} overflow="hidden" bg='primary.100'>
+          <Header timeline={
+            !timelineLoader && <Timeline data={timelineData} onItemSelected={handleSnapshotChange} activeItem={url} />
+          } />
+        </Box>
+        <Box flex='1' width="100%">
+          <iframe width="100%" height="100vh" style={{ border: 0, minHeight: iframeMinHeight }} src={url ? url : ''} />
         </Box>
       </Box>
     );
