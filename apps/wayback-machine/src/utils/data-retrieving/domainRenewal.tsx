@@ -1,8 +1,5 @@
 import { getFromENSGraph } from './ENSGraph';
-import { StaticJsonRpcProvider } from '@ethersproject/providers'
-
-const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
-
+import { ethereumProvider } from './provider';
 
 export const getDomainRenewals = async (ens: any) => {
   // Get labelName
@@ -27,10 +24,10 @@ export const getDomainRenewals = async (ens: any) => {
         // Obtain block timestamp and add event type
         const processedExpiryExtendeds = await Promise.all(filtereDomainRenewals.map(async (obj: any) => {
           const block = await ethereumProvider.getBlock(obj.blockNumber);
-          const from = (await ethereumProvider.getTransaction(obj.transactionID)).from
+          const from = (await ethereumProvider.getTransaction(obj.transactionID))!.from;
           const fromLookedUp = await ethereumProvider.lookupAddress(from);
 
-          return { ...obj, date: new Date(block.timestamp * 1000), eventType: "domainRenewal", from: from, fromLookedUp: fromLookedUp}
+          return { ...obj, date: new Date(block!.timestamp * 1000), eventType: "domainRenewal", from: from, fromLookedUp: fromLookedUp}
         }));
 
         // Return the array with the domain renewal events

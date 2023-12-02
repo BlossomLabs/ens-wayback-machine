@@ -1,7 +1,5 @@
 import { getFromENSGraph } from './ENSGraph';
-import { StaticJsonRpcProvider } from '@ethersproject/providers'
-
-const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
+import { ethereumProvider } from './provider';
 
 export const getDomainData = async (ens: string) => {
   // Get labelName
@@ -57,7 +55,7 @@ export const getDomainData = async (ens: string) => {
         const processedFilteredDate = await Promise.all(
           filteredDate.map(async (obj: any) => {
             const block = await ethereumProvider.getBlock(obj.blockNumber);
-            return { initialExpiryDate: new Date(obj.expiryDate * 1000), createdAt: new Date(block.timestamp * 1000) };
+            return { initialExpiryDate: new Date(obj.expiryDate * 1000), createdAt: new Date(block!.timestamp * 1000) };
           })
         );
         return processedFilteredDate;

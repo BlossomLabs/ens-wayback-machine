@@ -10,6 +10,9 @@ module.exports = {
     require.resolve("@vercel/style-guide/eslint/next"),
     "eslint-config-turbo",
   ],
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'warn',
+  },
   globals: {
     React: true,
     JSX: true,
@@ -17,7 +20,7 @@ module.exports = {
   env: {
     node: true,
   },
-  plugins: ["only-warn"],
+  plugins: ["only-warn", "@typescript-eslint"],
   settings: {
     "import/resolver": {
       typescript: {

@@ -1,13 +1,13 @@
+import { namehash } from "ethers";
 import { getDomainData } from "./domainData"
 import { getDomainRenewals } from "./domainRenewal"
 import { getTransfers } from "./transfers"
 import { getWrappedTransfers } from "./wrappedTransfers"
-import namehash from 'eth-ens-namehash'
 
 export const retrieveData = async (ens: string) => {
 
   // Generate namehash
-  const hash = namehash.hash(ens)
+  const hash = namehash(ens)
 
   // Requests to be done
   const promises = [

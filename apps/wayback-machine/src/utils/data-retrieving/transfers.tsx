@@ -1,7 +1,5 @@
 import { getFromENSGraph } from "./ENSGraph"
-import { StaticJsonRpcProvider } from '@ethersproject/providers'
-
-const ethereumProvider = new StaticJsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/BZwin08uUdw6bSIy5pvWnglh7EXeQo64')
+import { ethereumProvider } from "./provider"
 
 export const getTransfers = async (domainId: string) => {
 
@@ -31,7 +29,7 @@ export const getTransfers = async (domainId: string) => {
         const processedTransfers = await Promise.all(filteredTransfers.map(async (obj: any) => {
           const block = await ethereumProvider.getBlock(obj.blockNumber);
           const lookupOwner = await ethereumProvider.lookupAddress(obj.owner.id)
-          return { ...obj, date: new Date(block.timestamp * 1000), eventType: "transfer", ownerLookedUp: lookupOwner};
+          return { ...obj, date: new Date(block!.timestamp * 1000), eventType: "transfer", ownerLookedUp: lookupOwner};
         }));
 
         // Return the array with the wrapped transfers
