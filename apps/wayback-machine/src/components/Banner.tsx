@@ -9,6 +9,12 @@ export default function Banner() {
     setIsOpen(false); 
   }
 
+  if (!process.env.NEXT_PUBLIC_BANNER) {
+    return null;
+  }
+
+  const [text, link, href] = process.env.NEXT_PUBLIC_BANNER.split('|');
+
   return (
     <SlideFade offsetY="-20px" in={isOpen}>
       <Flex direction="row" align="center" justify="center" w="100%">
@@ -21,15 +27,15 @@ export default function Banner() {
           flexGrow={1}
         >
           <Text as="span" fontSize="20px" fontWeight="bold" mr={2}>
-            The ENS Wayback Machine is on Gitcoin GR20 Round!
+            {text}
           </Text>
           <Link
-            href="https://grants.gitcoin.co/"
+            href={href}
             isExternal
             _hover={{ textDecoration: 'none' }}
           >
             <Text as="span" fontWeight="extrabold" color='white' fontSize="20px" textDecoration="underline">
-              Support now!
+              {link}
             </Text>
           </Link>
          <IconButton
