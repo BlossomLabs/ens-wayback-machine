@@ -3,6 +3,7 @@ import { Box, Flex, Card, Link, Text, Input, InputGroup, InputLeftElement, Headi
 import { SearchIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom';
 import Favicon from "@/components/Favicon";
+import Banner from "@/components/Banner";
 
 const featured = [
   'evmcrispr.eth',
@@ -21,11 +22,12 @@ export default function Home() {
 
   return (
     <>
+     <Banner />
       <Flex
-        minHeight="100vh"
+        minHeight="calc(100vh - 62px)"
         align="center"
         justify="center"
-      >
+      > 
         <Container>
           <Box
             backgroundColor="rgba(193, 143, 101, 0.9)"
