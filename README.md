@@ -14,15 +14,18 @@ To get started with the ENS Wayback Machine, you can visit the [website](https:/
 
 The ENS Wayback Machine is an open-source project, and contributions are welcome. The code is available on [GitHub](https://github.com/BlossomLabs/wayback-machine), and you can run it locally using the following steps:
 
- 1. Clone the repository: git clone https://github.com/BlossomLabs/wayback-machine.git
- 2. Install dependencies: bun install
- 3. Start the development server: bun dev
+1.  Clone the repository: git clone https://github.com/BlossomLabs/wayback-machine.git
+2.  Install dependencies: bun install
+3.  Start the development server: bun dev
 
- You will need to have [Node v18 or above](https://nodejs.org/) and [Bun](https://bun.sh/) installed on your machine.
+You will need to have [Node v18 or above](https://nodejs.org/) and [Bun](https://bun.sh/) installed on your machine.
 
-## Future development
+## Deployment
+To deploy the ENS Wayback Machine, you can follow these steps:
 
-This project is in a very early stage. As next steps, we would like to improve the visual identity of the dApp and the mobile view support. If you find it useful, please share it with your friends!
+1. If you are interested, set the environment variable `NEXT_PUBLIC_BANNER` to customize the banner. The format is `[message text]|[link text]|[link href]`. If you don't set this variable, no banner will be displayed.
+2. Build the project: `bun run build`
+3. Deploy the built project to your desired hosting platform.
 
 ## License
 
