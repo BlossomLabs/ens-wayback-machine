@@ -23,9 +23,10 @@ You will need to have [Node v18 or above](https://nodejs.org/) and [Bun](https:/
 ## Deployment
 To deploy the ENS Wayback Machine, you can follow these steps:
 
-1. If you are interested, set the environment variable `NEXT_PUBLIC_BANNER` to customize the banner. The format is `[message text]|[link text]|[link href]`. If you don't set this variable, no banner will be displayed.
-2. Build the project: `bun run build`
-3. Deploy the built project to your desired hosting platform.
+1. Set The `NEXT_PUBLIC_THEGRAPH_API_KEY` environment variable to your TheGraph API key.
+2. If you are interested, set the environment variable `NEXT_PUBLIC_BANNER` to customize the banner. The format is `[message text]|[link text]|[link href]`. If you don't set this variable, no banner will be displayed.
+3. Build the project: `bun run build`
+4. Deploy the built project to your desired hosting platform.
 
 ## License
 
