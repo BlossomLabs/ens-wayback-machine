@@ -31,15 +31,16 @@ function toUrl(encoded: string) {
   }
 }
 
-export const getContentHashes = async (resolverId: string) => {
+export const getContentHashes = async (resolverIds: string[]) => {
   return getFromENSGraph(
-    `query GetENSContentHashes($resolverId: String!) {
-      contenthashChangeds(where: {resolver: $resolverId}) {
+    `query GetENSContentHashes($resolverIds: [String!]!) {
+      contenthashChangeds(where: {resolver_in: $resolverIds}) {
         blockNumber
         hash
       }
-    }`,
-    { resolverId },
+    }
+    `,
+    { resolverIds },
     async (result: any) => {
       if (result.data.contenthashChangeds.length > 0) {
         // Decode content hashes

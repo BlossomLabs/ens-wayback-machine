@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Timeline from "@/components/Timeline";
 
 // Custom functions
-import { getResolverId } from "@/utils/data-retrieving/resolverId";
+import { getResolverIds } from "@/utils/data-retrieving/resolverIds";
 import { getContentHashes } from "@/utils/data-retrieving/contentHashes";
 import { retrieveData } from "@/utils/data-retrieving/retrieveData";
 
@@ -53,7 +53,7 @@ export default function PageViewer() {
   const [url, setUrl] = useState('');
   const { url: _url } = useParams();
   const [loading, setLoading] = useState(true)
-  const [resolverId, setResolverId] = useState('')
+  const [resolverIds, setResolverIds] = useState<string[]>([])
 
   const [data, setData] = useState<any[]>([])
   const [timelineLoader, setTimelineLoader] = useState(true)
@@ -81,8 +81,8 @@ export default function PageViewer() {
     if (_url) {
       (async () => {
         // Get resolver id
-        await getResolverId(_url).then((result) => {
-          setResolverId(result)
+        await getResolverIds(_url).then((result: string[]) => {
+          setResolverIds(result)
           if (!result) {
             setLoading(false)
           }
@@ -96,10 +96,10 @@ export default function PageViewer() {
   }, [_url])
 
   useEffect(() => {
-    if (_url && resolverId) {
+    if (_url && resolverIds.length > 0) {
       (async () => {
         // Get content
-        await getContentHashes(resolverId).then((result) => {
+        await getContentHashes(resolverIds).then((result) => {
           if (result) {
             setSnapshots(result.decodedWithDate)
             setUrl(result.url)
@@ -108,21 +108,21 @@ export default function PageViewer() {
         })
       })();
     }
-  }, [_url, resolverId]);
+  }, [_url, resolverIds.join(',')]);
 
-  if (!resolverId && loading) {
+  if (!resolverIds.length && loading) {
     return (
       <>
         <LoadingContentComponent />
       </>
     )
-  } else if (!resolverId && !loading) {
+  } else if (!resolverIds.length && !loading) {
     return (
       <>
         <DomainUnavailableComponent />
       </>
     )
-  } else if (resolverId && snapshots.length === 0 && !loading) {
+  } else if (resolverIds.length && snapshots.length === 0 && !loading) {
     return (
       <>
         <ContentUnavailableComponent />
