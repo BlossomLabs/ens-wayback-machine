@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Flex, Link, Text, IconButton, SlideFade } from "@chakra-ui/react";
 import { CloseIcon } from '@chakra-ui/icons';
 
 export default function Banner() {
   const [isOpen, setIsOpen] = useState(true);
+  const [bannerContent, setBannerContent] = useState<string | null>(null);
 
   const handleClose = () => {
     setIsOpen(false); 
   }
 
-  if (!process.env.NEXT_PUBLIC_BANNER) {
+  useEffect(() => {
+    const fetchBannerContent = async () => {
+      if (!process.env.NEXT_PUBLIC_BANNER_URL) {
+        return;
+      }
+
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_BANNER_URL);
+        const data = await response.text();
+        setBannerContent(data);
+      } catch (error) {
+        console.error('Error fetching banner content:', error);
+      }
+    };
+
+    fetchBannerContent();
+  }, []);
+
+  if (!bannerContent) {
     return null;
   }
 
-  const [text, link, href] = process.env.NEXT_PUBLIC_BANNER.split('|');
+  const [text, link, href] = bannerContent.split('|');
 
   return (
     <SlideFade offsetY="-20px" in={isOpen}>
