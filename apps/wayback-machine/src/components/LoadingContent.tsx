@@ -8,7 +8,7 @@ export default function LoadingContentComponent() {
         align="center"
         justify="center"
       >
-        <Container>
+        <Container maxW="xl">
           <Box
             backgroundColor="rgba(193, 143, 101, 0.9)"
             borderRadius="8px"

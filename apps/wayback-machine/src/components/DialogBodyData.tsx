@@ -1,11 +1,12 @@
-import { Box, Tooltip, Text, Link } from '@chakra-ui/react';
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { Box, Text, Link } from '@chakra-ui/react';
+import { LuExternalLink } from 'react-icons/lu';
+import { Tooltip } from '@/components/ui/tooltip'
 
-type ModalBodyDataProps = {
-    selectedItem: ModalData | null;
+type DialogBodyDataProps = {
+    selectedItem: DialogData | null;
 };
 
-type ModalData = {
+type DialogData = {
     eventType: string,
     date: Date,
     transactionID: string,
@@ -48,10 +49,10 @@ function BaseBox({ label, text, fullText, link }: BaseBoxProps) {
     <Box marginBottom="2">
       <Text as="span" fontWeight="bold">{label}: </Text>
       {link ? (
-        <Tooltip label={fullText}>
-          <Link href={link} isExternal>
+        <Tooltip content={fullText}>
+          <Link href={link} target="_blank" rel="noopener noreferrer">
             {text}
-            <ExternalLinkIcon mx='4px' />
+            <LuExternalLink size={16} />
           </Link>
         </Tooltip>
       ) : (
@@ -79,7 +80,7 @@ function DateBox({ label, date }: DateBoxProps) {
   )
 }
 
-export const ModalBodyData = ({ selectedItem }: ModalBodyDataProps) => {
+export const DialogBodyData = ({ selectedItem }: DialogBodyDataProps) => {
   if (selectedItem?.eventType === "transfer" || selectedItem?.eventType === "wrappedTransfer") {
     return (
       <div>

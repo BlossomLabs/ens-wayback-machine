@@ -1,138 +1,125 @@
-import { extendTheme } from '@chakra-ui/react';
-import { cardAnatomy, inputAnatomy, modalAnatomy } from '@chakra-ui/anatomy'
-import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
+import { createSystem, defaultConfig, defineRecipe, defineSlotRecipe } from "@chakra-ui/react"
 
-const modalTheme = () => {
-  const { definePartsStyle, defineMultiStyleConfig } =
-      createMultiStyleConfigHelpers(modalAnatomy.keys)
-  return defineMultiStyleConfig({
-    baseStyle: definePartsStyle({
-      dialog: {
-        borderRadius: 'lg',
-        bg: 'primary.100',
-      }
-    })
-  })
-}
-
-const cardTheme = () => {
-  const { definePartsStyle, defineMultiStyleConfig } =
-      createMultiStyleConfigHelpers(cardAnatomy.keys)
-  return defineMultiStyleConfig({
-    baseStyle: definePartsStyle({
-      container: {
-        borderRadius: 'lg',
-        p: 2,
-        bg: 'transparent',
-      }
-    }),
-    variants: {
-      semiTransparent: definePartsStyle({
-        container: {
-          bg: 'rgba(193, 143, 101, 0.9)',
+export const system = createSystem(defaultConfig, {
+  globalCss: {
+    body: {
+      backgroundColor: 'primary.100',
+      backgroundImage: "url('./bg.png')",
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+    },
+  },
+  theme: {
+    tokens: {
+      fontSizes: {
+        'xs': { value: '0.9rem' },
+        'sm': { value: '1rem' },
+        'md': { value: '1.1rem' },
+      },
+      colors: {
+        primary: {
+          100: { value: '#CAA9A5' },
+          200: { value: '#C39C98' },
+          300: { value: '#BB908B' },
+          400: { value: '#b4847e' },
+          500: { value: '#ac7872' },
+          600: { value: '#a46b65' },
+          700: { value: '#9a615b' },
+          800: { value: '#8d5953' },
+          900: { value: '#81514B' },
+        },
+        secondary: {
+          100: { value: '#F7DAB5' },
+          200: { value: '#F5D1A3' },
+          300: { value: '#F3C891' },
+          400: { value: '#F1BF7E' },
+          500: { value: '#EFB66C' },
+          600: { value: '#EDAD5A' },
+          700: { value: '#EBA448' },
+          800: { value: '#E99B36' },
+          900: { value: '#E79224' },
+        },
+      },
+      fonts: {
+        heading: { value: `'Megrim', sans-serif` },
+        body: { value: `'Edu QLD Beginner', sans-serif` },
+      },
+    },
+    semanticTokens: {
+      colors: {
+        background: { value: 'rgba(193, 143, 101, 0.9)' },
+        panel: { value: 'rgba(193, 143, 101, 0.9)' },
+      },
+    },
+    recipes: {
+      box: defineRecipe({
+        variants: {
+          semiTransparent: {
+            true: {
+              bg: 'rgba(193, 143, 101, 0.9)',
+              borderRadius: '8px',
+              p: 4,
+            }
+          }
         }
       }),
+      text: defineRecipe({
+        base: {
+          fontFamily: 'Edu QLD Beginner',
+          fontWeight: 'extrabold',
+        }
+      }),
+      heading: defineRecipe({
+        base: {
+          fontFamily: 'Megrim',
+          fontWeight: 'extrabold',
+          textShadow:
+            '1px 1px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0)',
+        },
+      }),
+      link: defineRecipe({
+        base: {
+          textDecoration: 'none',
+        }
+      }),
+      input: defineRecipe({
+        base:{
+              fontFamily: 'Edu QLD Beginner',
+              borderColor: 'black',
+              _hover: {
+                borderColor: 'black',
+              },
+              _placeholder: {
+                color: 'black',
+                opacity: 1,
+                fontFamily: 'Edu QLD Beginner',
+              },
+              _focusVisible: {
+                opacity: 1,
+                fontFamily: 'Edu QLD Beginner',
+                outline: 'none',
+              },
+        }
+      }),
+      card: defineRecipe({
+        base: {
+          borderRadius: 'lg',
+          p: 2,
+          bg: 'transparent',
+        },
+      })
+    },
+    slotRecipes: {
+      dialog: defineSlotRecipe({
+        slots: ['content'],
+        base: {
+          content: {
+            borderRadius: 'lg',
+            bg: 'primary.100',
+          },
+        }
+      })
     }
-  })
-}
-
-const inputTheme = () => {
-  const { definePartsStyle, defineMultiStyleConfig } =
-      createMultiStyleConfigHelpers(inputAnatomy.keys)
-  return defineMultiStyleConfig({
-    baseStyle: definePartsStyle({
-      element: {
-        height: '100%', // center vertically
-      },
-      field: {
-        fontFamily: 'Edu QLD Beginner',
-        borderColor: 'black',
-        _hover: {
-          borderColor: 'black',
-        },
-        _placeholder: {
-          color: 'black',
-          opacity: 1,
-          fontFamily: 'Edu QLD Beginner',
-        },
-        _focusVisible: {
-          opacity: 1,
-          fontFamily: 'Edu QLD Beginner',
-          outline: 'none',
-        },
-      }
-    })
-  })
-}
-
-const theme = extendTheme({
-  styles: {
-    global: {
-      body: {
-        overflowX: 'hidden',
-        backgroundImage: "url('./bg.png')",
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      },
-    },
   },
-  colors: {
-    primary: {
-      100: '#CAA9A5',
-      200: '#C39C98',
-      300: '#BB908B',
-      400: '#b4847e',
-      500: '#ac7872',
-      600: '#a46b65',
-      700: '#9a615b',
-      800: '#8d5953',
-      900: '#81514B',
-    },
-    secondary: {
-      100: '#F7DAB5',
-      200: '#F5D1A3',
-      300: '#F3C891',
-      400: '#F1BF7E',
-      500: '#EFB66C',
-      600: '#EDAD5A',
-      700: '#EBA448',
-      800: '#E99B36',
-      900: '#E79224',
-    },
-  },
-  fonts: {
-    heading: 'Megrim',
-    body: 'Edu QLD Beginner',
-  },
-  components: {
-    Box: {
-      variants: {
-        semiTransparent: {
-          bg: 'rgba(193, 143, 101, 0.9)',
-          borderRadius: '8px',
-          p: 4,
-        },
-      },
-    },
-    Modal: modalTheme(),
-    Card: cardTheme(),
-    Heading: {
-      baseStyle: {
-        fontFamily: 'Megrim',
-        fontWeight: 'extrabold',
-        textShadow:
-          '1px 1px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0)',
-      },
-    },
-    Text: {
-      baseStyle: {
-        fontFamily: 'Edu QLD Beginner',
-        fontWeight: 'extrabold',
-      },
-    },
-    Input: inputTheme(),
-  },
-});
-
-export default theme;
+})

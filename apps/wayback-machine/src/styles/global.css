@@ -15,3 +15,8 @@
   background-color: #ac7872;
   border-radius: 10px;
 }
+
+:where(html) {
+  --chakra-colors-border: 'black';
+  --focus-ring-width: 0px;
+}

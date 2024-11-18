@@ -1,8 +1,9 @@
 
 import React, { MouseEventHandler } from 'react';
-import { Flex, Circle, Tooltip } from '@chakra-ui/react';
+import { Flex, Circle } from '@chakra-ui/react';
 import useIsInView from '@/hooks/useIsInView';
 import Image from 'next/image';
+import { Tooltip } from "@/components/ui/tooltip"
 
 type TimelineItemProps = {
     date: Date;
@@ -23,10 +24,12 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
   if (eventType === "domainRegistration") {
     return (
       <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
+        portalled
+        content={formattedDate}
+        showArrow
+        positioning={{ placement: isActive ? "top" : "bottom" }}
+        open={!isInView ? false : isActive ? true : undefined}
+        openDelay={0}
       >
         <Flex
           ref={ref}
@@ -50,10 +53,12 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
   } else if (eventType === "domainRenewal") {
     return (
       <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
+        portalled
+        content={formattedDate}
+        showArrow
+        positioning={{ placement: isActive ? "top" : "bottom" }}
+        open={!isInView ? false : isActive ? true : undefined}
+        openDelay={0}
       >
         <Flex
           ref={ref}
@@ -77,10 +82,12 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
   } else if (eventType === "wrappedTransfer") {
     return (
       <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
+        portalled
+        content={formattedDate}
+        showArrow
+        positioning={{ placement: isActive ? "top" : "bottom" }}
+        open={!isInView ? false : isActive ? true : undefined}
+        openDelay={0}
       >
         <Flex
           ref={ref}
@@ -104,10 +111,12 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
   } else if (eventType === "contentUpload") {
     return (
       <Tooltip
-        label={formattedDate}
-        hasArrow
-        placement={isActive ? "top" : "bottom"}
-        isOpen={!isInView ? false : isActive ? true : undefined}
+        portalled
+        content={formattedDate}
+        showArrow
+        positioning={{ placement: isActive ? "top" : "bottom" }}
+        open={!isInView ? false : isActive ? true : undefined}
+        openDelay={0}
       >
         <Flex
           ref={ref}
@@ -133,10 +142,12 @@ export const TimelineItem = ({ date, eventType, onClick, isActive }: TimelineIte
     if(today > date) {
       return(
         <Tooltip
-          label={formattedDate}
-          hasArrow
-          placement={isActive ? "top" : "bottom"}
-          isOpen={!isInView ? false : isActive ? true : undefined}
+          portalled
+          content={formattedDate}
+          showArrow
+          positioning={{ placement: isActive ? "top" : "bottom" }}
+          open={!isInView ? false : isActive ? true : undefined}
+          openDelay={0}
         >
           <Flex
             ref={ref}

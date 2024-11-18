@@ -1,9 +1,10 @@
 import { FormEventHandler, useState } from "react";
-import { Box, Flex, Card, Link, Text, Input, InputGroup, InputLeftElement, Heading, Container, HStack } from "@chakra-ui/react"
-import { SearchIcon } from '@chakra-ui/icons'
+import { Box, Flex, Card, Link, Text, Input, Heading, Container, HStack } from "@chakra-ui/react"
+import { LuSearch } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import Favicon from "@/components/Favicon";
 import Banner from "@/components/Banner";
+import { InputGroup } from "@/components/ui/input-group"
 
 const featured = [
   'evmcrispr.eth',
@@ -28,7 +29,7 @@ export default function Home() {
         align="center"
         justify="center"
       > 
-        <Container>
+        <Container maxW="xl">
           <Box
             backgroundColor="rgba(193, 143, 101, 0.9)"
             borderRadius="8px"
@@ -44,24 +45,15 @@ export default function Home() {
               The ENS Wayback Machine allows users to go back in time and see how ENS linked dApps looked like.
             </Text>
             <form onSubmit={handeSubmit}>
-              <InputGroup mt={4} mx="auto" maxW="lg">
-                <InputLeftElement pointerEvents='none'>
-                  <SearchIcon color='black' />
-                </InputLeftElement>
+              <InputGroup mt={4} mx="auto" maxW="lg" width="100%" startElement={
+                <LuSearch size={20} color="black" />
+              }>
                 <Input
                   value={url}
                   autoFocus
                   onChange={(event) => setUrl(event.target.value)}
                   placeholder='Enter an ENS URL'
                   size="lg"
-                  // Workaround because Chakra UI input theming doesn't support _focusVisible
-                  _focusVisible={{
-                    outline: 'none',
-                  }}
-                  // Workaround because Chakra UI input theming doesn't support _hover
-                  _hover={{
-                    borderColor: 'black !important',
-                  }}
                   fontWeight="extrabold"
                 />
               </InputGroup>
@@ -70,16 +62,16 @@ export default function Home() {
           <Box>
             <Flex mt={4} justify="space-around" wrap="wrap" flexDirection={['column', 'column', 'row']}>
               {featured.map((item) => (
-                <Card variant={'semiTransparent'} key={item} borderWidth="2px" p={2} mb={1}>
-                  <Text textAlign="center" fontSize={20}>
-                    <Link href={`/#/${item}`}>
-                      <HStack spacing={2}>
-                        <Favicon width="16" height="16" alt="" src={`https://${item}.limo/favicon.ico`} />
-                        <Text>{item}</Text>
-                      </HStack>
-                    </Link>
-                  </Text>
-                </Card>
+                <Card.Root key={item} borderWidth="2px" p={2} mb={1} bg='rgba(193, 143, 101, 0.9)'>
+                    <Text textAlign="center" fontSize={20}>
+                      <Link href={`/#/${item}`} _hover={{ textDecoration: 'none' }}>
+                        <HStack spaceX={2}>
+                          <Favicon width="16" height="16" alt="" src={`https://${item}.limo/favicon.ico`} />
+                          <Text>{item}</Text>
+                        </HStack>
+                      </Link>
+                    </Text>
+                </Card.Root>
               ))}
             </Flex>
           </Box>

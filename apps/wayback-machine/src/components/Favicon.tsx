@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image, { ImageProps } from 'next/image';
 
-import { GlobeAltIcon } from '@heroicons/react/24/outline'
+import { LuGlobe } from 'react-icons/lu';
 
 
 type FaviconProps = {
@@ -25,7 +25,7 @@ const Favicon = ({ src, ...props }: FaviconProps) => {
 
   return (
     <>
-      {errorCount === 2 ? <GlobeAltIcon width="16px" height="16px" /> :
+      {errorCount === 2 ? <LuGlobe size={16} /> :
         <Image
           src={imageSrc}
           onError={handleError}

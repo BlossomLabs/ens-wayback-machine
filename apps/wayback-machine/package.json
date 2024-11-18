@@ -9,21 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@chakra-ui/anatomy": "^2.2.2",
-    "@chakra-ui/icons": "^2.1.1",
-    "@chakra-ui/next-js": "^2.2.0",
-    "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
+    "@chakra-ui/react": "^3.1.2",
+    "@emotion/react": "^11.13.3",
     "@ensdomains/content-hash": "^3.0.0",
     "@fontsource/edu-qld-beginner": "^4.5.4",
     "@fontsource/megrim": "^4.5.11",
-    "@heroicons/react": "^2.0.17",
-    "framer-motion": "^10.10.0",
     "ethers": "^6.9.0",
     "next": "^14.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^5.3.0",
     "react-router-dom": "^6.20.0"
   },
   "devDependencies": {

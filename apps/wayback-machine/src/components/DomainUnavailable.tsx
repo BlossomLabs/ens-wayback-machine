@@ -11,7 +11,7 @@ export default function DomainUnavailableComponent () {
         align="center"
         justify="center"
       >
-        <Container>
+        <Container maxW="xl">
           <Box
             backgroundColor="rgba(193, 143, 101, 0.9)"
             borderRadius="8px"

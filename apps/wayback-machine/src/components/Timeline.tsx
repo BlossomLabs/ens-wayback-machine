@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Flex, Box, useDisclosure, IconButton, VStack, } from '@chakra-ui/react';
+import { Flex, Box, useDisclosure, IconButton, VStack, DialogBackdrop, } from '@chakra-ui/react';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react'
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
-import { TimelineItem } from '@/utils/data-rendering/timelineItem';
-import { ModalBodyData } from '@/utils/data-rendering/modalBodyData';
-import { PlusIcon } from '@heroicons/react/24/outline';
-import { MinusIcon } from '@chakra-ui/icons';
+import { TimelineItem } from '@/components/TimelineItem';
+import { DialogBodyData } from './DialogBodyData';
+import { LuPlus, LuMinus } from 'react-icons/lu';
 
 type TimelineData = {
   id: string,
@@ -41,7 +42,7 @@ type TimelineProps = {
 const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   const [selectedItem, setSelectedItem] = useState<TimelineData | null>(null);
   const [zoom, setZoom] = useState(1);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { open, onOpen, onClose } = useDisclosure()
   const maxZoom = 3;
   const minZoom = 0.5;
 
@@ -95,7 +96,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
   const flexBasisValues = calculateFlexBasis(data);
 
   return (
-    <div>
+    <>
       <Flex>
         <Box
           flex='1'
@@ -104,7 +105,7 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
           mt={8}
           style={{ overflowX: "scroll" }}
           className="hide-scrollbar"
-          backgroundImage="linear-gradient(to right, primary.900 0%, primary.900 100%)"
+          backgroundImage="linear-gradient(to right, var(--chakra-colors-primary-900) 0%, var(--chakra-colors-primary-900) 100%)"
           backgroundSize="100% 3px"
           backgroundRepeat="no-repeat"
           backgroundPosition="0 14px"
@@ -128,38 +129,44 @@ const Timeline = ({ data, onItemSelected, activeItem }: TimelineProps) => {
         </Box>
         <VStack w="30px" mt={4}>
           <IconButton
-            colorScheme='primary'
-            size={'xs'}
+            bg="primary.500"
+            color="white"
+            size={'2xs'}
             aria-label='Zoom in'
-            icon={<PlusIcon />}
+            children={<LuPlus size={16} />}
             onClick={handleZoomIn} disabled={zoom >= maxZoom}
           />
           <IconButton
-            colorScheme='primary'
-            size={'xs'}
+            bg="primary.500"
+            color="white"
+            size={'2xs'}
             aria-label='Zoom out'
-            icon={<MinusIcon />}
+            children={<LuMinus size={16} />}
             onClick={handleZoomOut} disabled={zoom <= minZoom}
           />
         </VStack>
       </Flex>
-      <div>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            {selectedItem?.eventType === "transfer" && (<ModalHeader>{`Transfer`}</ModalHeader>)}
-            {selectedItem?.eventType === "wrappedTransfer" && (<ModalHeader>{`Wrapped transfer`}</ModalHeader>)}
-            {selectedItem?.eventType === "domainRegistration" && (<ModalHeader>{`Domain registered`}</ModalHeader>)}
-            {selectedItem?.eventType === "domainRenewal" && (<ModalHeader>{`Domain renewed`}</ModalHeader>)}
-            {selectedItem?.eventType === "domainExpiration" && (<ModalHeader>{`Domain expired`}</ModalHeader>)}
-            <ModalCloseButton />
-            <ModalBody>
-              <ModalBodyData selectedItem={selectedItem}/>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      </div>
-    </div>
+      <DialogRoot open={open} onOpenChange={onClose} size="sm">
+          <DialogBackdrop />
+          <DialogTrigger />
+          <DialogContent>
+            <DialogCloseTrigger _hover={{ bg: 'transparent' }} />
+            <DialogHeader>
+              <DialogTitle>
+                {selectedItem?.eventType === "transfer" && (<>{`Transfer`}</>)}
+                {selectedItem?.eventType === "wrappedTransfer" && (<>{`Wrapped transfer`}</>)}
+                {selectedItem?.eventType === "domainRegistration" && (<>{`Domain registered`}</>)}
+                {selectedItem?.eventType === "domainRenewal" && (<>{`Domain renewed`}</>)}
+                {selectedItem?.eventType === "domainExpiration" && (<>{`Domain expired`}</>)}
+              </DialogTitle>
+            </DialogHeader>
+            <DialogBody>
+              <DialogBodyData selectedItem={selectedItem}/>
+            </DialogBody>
+            <DialogFooter />
+          </DialogContent>
+        </DialogRoot>
+    </>
   );
 
 };
