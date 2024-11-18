@@ -1,13 +1,9 @@
-import { Box, Flex, Text, Heading, Container } from "@chakra-ui/react"
+import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 
 export default function LoadingContentComponent() {
   return (
     <>
-      <Flex
-        minHeight="100vh"
-        align="center"
-        justify="center"
-      >
+      <Flex minHeight="100vh" align="center" justify="center">
         <Container maxW="xl">
           <Box
             backgroundColor="rgba(193, 143, 101, 0.9)"
@@ -15,17 +11,23 @@ export default function LoadingContentComponent() {
             border={"2px solid black"}
             p={4}
           >
-            <Box bg="primary.500" borderRadius="5px" p={4} mt="-60px" border="3px solid black">
+            <Box
+              bg="primary.500"
+              borderRadius="5px"
+              p={4}
+              mt="-60px"
+              border="3px solid black"
+            >
               <Heading textAlign="center" fontSize={"37px"}>
-                                ENS Wayback Machine
+                ENS Wayback Machine
               </Heading>
             </Box>
             <Text textAlign="center" mt={4} fontSize={"26px"}>
-                            Loading...
+              Loading...
             </Text>
           </Box>
         </Container>
       </Flex>
     </>
-  )
+  );
 }

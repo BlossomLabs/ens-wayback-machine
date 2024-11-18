@@ -17,6 +17,6 @@
 }
 
 :where(html) {
-  --chakra-colors-border: 'black';
+  --chakra-colors-border: "black";
   --focus-ring-width: 0px;
 }

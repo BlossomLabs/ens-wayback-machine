@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import Image, { ImageProps } from 'next/image';
+import Image, { type ImageProps } from "next/image";
+import React, { useState } from "react";
 
-import { LuGlobe } from 'react-icons/lu';
-
+import { LuGlobe } from "react-icons/lu";
 
 type FaviconProps = {
-    src: string;
+  src: string;
 } & ImageProps;
 
 const Favicon = ({ src, ...props }: FaviconProps) => {
@@ -14,24 +13,22 @@ const Favicon = ({ src, ...props }: FaviconProps) => {
 
   const handleError = () => {
     if (errorCount === 0) {
-      const fallbackSrc = src.replace(/\.ico$/, '.png');
+      const fallbackSrc = src.replace(/\.ico$/, ".png");
       setImageSrc(fallbackSrc);
       setErrorCount(1);
     } else if (errorCount === 1) {
-      setImageSrc('/public/default-favicon.png');
+      setImageSrc("/public/default-favicon.png");
       setErrorCount(2);
     }
   };
 
   return (
     <>
-      {errorCount === 2 ? <LuGlobe size={16} /> :
-        <Image
-          src={imageSrc}
-          onError={handleError}
-          {...props}
-        />
-      }
+      {errorCount === 2 ? (
+        <LuGlobe size={16} />
+      ) : (
+        <Image src={imageSrc} onError={handleError} {...props} />
+      )}
     </>
   );
 };

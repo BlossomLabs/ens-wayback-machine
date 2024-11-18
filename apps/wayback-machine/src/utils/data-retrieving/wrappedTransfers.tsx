@@ -1,8 +1,7 @@
-import { getFromENSGraph } from "./ENSGraph"
-import { ethereumProvider } from "./provider"
+import { getFromENSGraph } from "./ENSGraph";
+import { ethereumProvider } from "./provider";
 
 export const getWrappedTransfers = async (domainId: string) => {
-
   return getFromENSGraph(
     `query GetDomainTransfers($domainId: String!) {
           domainEvents(
@@ -20,21 +19,31 @@ export const getWrappedTransfers = async (domainId: string) => {
         }`,
     { domainId: domainId },
     async (result: any) => {
-
       // If there are transfers
       if (result.data.domainEvents.length > 0) {
         // Remove empty objects (TheGraph returns empty object if event type does not match)
-        const filteredWrappedTransfers = result.data.domainEvents.filter((obj: object) => Object.keys(obj).length > 0);
+        const filteredWrappedTransfers = result.data.domainEvents.filter(
+          (obj: object) => Object.keys(obj).length > 0,
+        );
         // Obtain block timestamp and add event type
-        const processedWrappedTransfers = await Promise.all(filteredWrappedTransfers.map(async (obj: any) => {
-          const block = await ethereumProvider.getBlock(obj.blockNumber);
-          const lookupOwner = await ethereumProvider.lookupAddress(obj.owner.id)
-          return { ...obj, date: new Date(block!.timestamp * 1000), eventType: "wrappedTransfer", ownerLookedUp: lookupOwner};
-        }));
+        const processedWrappedTransfers = await Promise.all(
+          filteredWrappedTransfers.map(async (obj: any) => {
+            const block = await ethereumProvider.getBlock(obj.blockNumber);
+            const lookupOwner = await ethereumProvider.lookupAddress(
+              obj.owner.id,
+            );
+            return {
+              ...obj,
+              date: new Date(block!.timestamp * 1000),
+              eventType: "wrappedTransfer",
+              ownerLookedUp: lookupOwner,
+            };
+          }),
+        );
 
         // Return the array with the wrapped transfers
-        return processedWrappedTransfers
-
+        return processedWrappedTransfers;
       }
-    })
-}
+    },
+  );
+};

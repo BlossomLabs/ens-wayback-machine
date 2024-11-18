@@ -1,23 +1,22 @@
+import "@fontsource/edu-qld-beginner";
+import "@fontsource/megrim";
 
-import "@fontsource/edu-qld-beginner"
-import "@fontsource/megrim"
-
-import { ChakraProvider } from '@chakra-ui/react'
-import {HashRouter as Router, Routes, Route} from 'react-router-dom';
+import { ChakraProvider } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { Route, HashRouter as Router, Routes } from "react-router-dom";
 
-import '@/styles/global.css'
+import "@/styles/global.css";
 
-import Home from './index'
-import PageViewer from './[url]'
 import { system } from "@/theme";
+import PageViewer from "./[url]";
+import Home from "./index";
 
 export default function App() {
   const [render, setRender] = useState(false);
   useEffect(() => setRender(true), []);
-  return render ?
-    <ChakraProvider value={system} >
-      {typeof window === 'undefined' ? null : (
+  return render ? (
+    <ChakraProvider value={system}>
+      {typeof window === "undefined" ? null : (
         <Router>
           <Routes>
             <Route path="/:url" element={<PageViewer />} />
@@ -26,5 +25,5 @@ export default function App() {
         </Router>
       )}
     </ChakraProvider>
-    : null;
+  ) : null;
 }
