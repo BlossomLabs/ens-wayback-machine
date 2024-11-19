@@ -1,7 +1,6 @@
 import { Tooltip } from "@/components/ui/tooltip";
 import useIsInView from "@/hooks/useIsInView";
-import { Circle, Flex } from "@chakra-ui/react";
-import Image from "next/image";
+import { Circle, Flex, Image } from "@chakra-ui/react";
 import React, { type MouseEventHandler } from "react";
 
 type TimelineItemProps = {
@@ -50,8 +49,8 @@ export const TimelineItem = ({
                   ? "timeline-icons/first-event.svg"
                   : "timeline-icons/first-event.svg"
               }
-              height={32}
-              width={32}
+              width="32px"
+              height="32px"
               alt="First event"
             />
           </Circle>
@@ -84,8 +83,8 @@ export const TimelineItem = ({
                   ? "timeline-icons/domain-renewal.svg"
                   : "timeline-icons/domain-renewal.svg"
               }
-              height={32}
-              width={32}
+              width="32px"
+              height="32px"
               alt="First event"
             />
           </Circle>
@@ -118,8 +117,8 @@ export const TimelineItem = ({
                   ? "timeline-icons/new-owner.svg"
                   : "timeline-icons/new-owner.svg"
               }
-              height={32}
-              width={32}
+              width="32px"
+              height="32px"
               alt="First event"
             />
           </Circle>
@@ -152,8 +151,8 @@ export const TimelineItem = ({
                   ? "timeline-icons/content-upload.svg"
                   : "timeline-icons/content-upload.svg"
               }
-              height={32}
-              width={32}
+              width="32px"
+              height="32px"
               alt="Content upload"
             />
           </Circle>
@@ -187,8 +186,8 @@ export const TimelineItem = ({
                   ? "timeline-icons/domain-expired.svg"
                   : "timeline-icons/domain-expired.svg"
               }
-              height={32}
-              width={32}
+              width="32px"
+              height="32px"
               alt="Content upload"
             />
           </Circle>

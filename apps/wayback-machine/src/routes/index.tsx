@@ -12,20 +12,33 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import { type FormEventHandler, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import React, { type FormEventHandler, useState, useEffect } from "react";
 import { LuSearch } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+
+export const Route = createFileRoute("/")({
+  component: HomeComponent,
+});
 
 const featured = ["evmcrispr.eth", "uniswap.eth", "vitalik.eth"];
 
-export default function Home() {
+export default function HomeComponent() {
   const [url, setUrl] = useState("");
   const navigate = useNavigate();
 
   const handeSubmit: FormEventHandler = (event) => {
     event.preventDefault();
-    navigate(`/${url}`);
+    navigate({ to: `/${url}` });
   };
+
+  // Redirect form /#/ens-url to /ens-url
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.startsWith("#/")) {
+      const path = hash.slice(2); // Remove '#/'
+      navigate({ to: `/${path}` });
+    }
+  }, [navigate]);
 
   return (
     <>
@@ -93,12 +106,7 @@ export default function Home() {
                       _hover={{ textDecoration: "none" }}
                     >
                       <HStack spaceX={2}>
-                        <Favicon
-                          width="16"
-                          height="16"
-                          alt=""
-                          src={`https://${item}.limo/favicon.ico`}
-                        />
+                        <Favicon src={`https://${item}.limo/favicon.ico`} />
                         <Text>{item}</Text>
                       </HStack>
                     </Link>

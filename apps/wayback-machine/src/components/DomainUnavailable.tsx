@@ -1,5 +1,5 @@
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 export default function DomainUnavailableComponent() {
   return (

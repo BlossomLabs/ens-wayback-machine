@@ -1,4 +1,4 @@
-import Image, { type ImageProps } from "next/image";
+import { Image, type ImageProps } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 import { LuGlobe } from "react-icons/lu";
@@ -27,7 +27,14 @@ const Favicon = ({ src, ...props }: FaviconProps) => {
       {errorCount === 2 ? (
         <LuGlobe size={16} />
       ) : (
-        <Image src={imageSrc} onError={handleError} {...props} />
+        <Image
+          width={"16px"}
+          height={"16px"}
+          alt="favicon"
+          src={imageSrc}
+          onError={handleError}
+          {...props}
+        />
       )}
     </>
   );

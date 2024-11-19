@@ -14,12 +14,12 @@ export default function Banner() {
 
   useEffect(() => {
     const fetchBannerContent = async () => {
-      if (!process.env.NEXT_PUBLIC_BANNER_URL) {
+      if (!import.meta.env.VITE_BANNER_URL) {
         return;
       }
 
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_BANNER_URL);
+        const response = await fetch(import.meta.env.VITE_BANNER_URL);
         const data = await response.text();
         setBannerContent(data);
       } catch (error) {
@@ -68,7 +68,7 @@ export default function Banner() {
                 {link}
               </Text>
             </Link>
-            {/* <Collapsible.Trigger paddingY="3">
+            <Collapsible.Trigger paddingY="3">
               <IconButton
                 aria-label="Close banner"
                 position="absolute"
@@ -82,7 +82,7 @@ export default function Banner() {
               >
                 <LuX />
               </IconButton>
-            </Collapsible.Trigger> */}
+            </Collapsible.Trigger>
           </Box>
         </Flex>
       </Collapsible.Content>

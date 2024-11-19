@@ -1,22 +1,29 @@
-"use client";
-
-import { Box, Flex, Spinner, Text, useBreakpointValue } from "@chakra-ui/react";
-import Image from "next/image";
-import type React from "react";
+import {
+  Box,
+  Flex,
+  Image,
+  Spinner,
+  Text,
+  useBreakpointValue,
+} from "@chakra-ui/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
+import type * as React from "react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
 
 import Timeline from "@/components/Timeline";
 
 import { getContentHashes } from "@/utils/data-retrieving/contentHashes";
-// Custom functions
 import { getResolverIds } from "@/utils/data-retrieving/resolverIds";
 import { retrieveData } from "@/utils/data-retrieving/retrieveData";
 
 import ContentUnavailableComponent from "@/components/ContentUnavailable";
-// Pages
 import DomainUnavailableComponent from "@/components/DomainUnavailable";
 import LoadingContentComponent from "@/components/LoadingContent";
+
+export const Route = createFileRoute("/$url")({
+  component: RouteComponent,
+});
 
 function Header({ timeline }: { timeline: React.ReactElement | false }) {
   return (
@@ -29,7 +36,13 @@ function Header({ timeline }: { timeline: React.ReactElement | false }) {
       <Box minWidth="120px">
         <Link to="/">
           <Box mb={5}>
-            <Image alt="Logo" src="/header-logo.svg" width="120" height="100" />
+            <Image
+              alt="Logo"
+              src="/header-logo.svg"
+              width="120px"
+              height="100px"
+              fit="contain"
+            />
           </Box>
         </Link>
       </Box>
@@ -49,12 +62,12 @@ function Header({ timeline }: { timeline: React.ReactElement | false }) {
   );
 }
 
-export default function PageViewer() {
+export default function RouteComponent() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>(
     [],
   );
   const [url, setUrl] = useState("");
-  const { url: _url } = useParams();
+  const { url: _url } = useParams({ from: Route.id });
   const [loading, setLoading] = useState(true);
   const [resolverIds, setResolverIds] = useState<string[]>([]);
 
