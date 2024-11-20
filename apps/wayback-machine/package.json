@@ -24,6 +24,7 @@
     "@ensdomains/content-hash": "^3.0.0",
     "@fontsource/edu-qld-beginner": "^4.5.4",
     "@fontsource/megrim": "^4.5.11",
+    "@tanstack/react-query": "^5.60.6",
     "@tanstack/react-router": "^1.82.1",
     "@tanstack/router-devtools": "^1.82.1",
     "ethers": "^6.9.0",

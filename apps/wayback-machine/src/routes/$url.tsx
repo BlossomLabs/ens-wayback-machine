@@ -20,6 +20,7 @@ import { retrieveData } from "@/utils/data-retrieving/retrieveData";
 import ContentUnavailableComponent from "@/components/ContentUnavailable";
 import DomainUnavailableComponent from "@/components/DomainUnavailable";
 import LoadingContentComponent from "@/components/LoadingContent";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/$url")({
   component: RouteComponent,
@@ -66,13 +67,20 @@ export default function RouteComponent() {
   const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>(
     [],
   );
+  const [loading, setLoading] = useState(true);
   const [url, setUrl] = useState("");
   const { url: _url } = useParams({ from: Route.id });
-  const [loading, setLoading] = useState(true);
-  const [resolverIds, setResolverIds] = useState<string[]>([]);
 
-  const [data, setData] = useState<any[]>([]);
-  const [timelineLoader, setTimelineLoader] = useState(true);
+  const { data: resolverIds } = useQuery({
+    queryKey: ["resolverIds", _url],
+    queryFn: () => getResolverIds(_url),
+  });
+
+  const { data: data, isLoading: timelineLoader } = useQuery({
+    queryKey: ["data", _url],
+    queryFn: () => retrieveData(_url),
+  });
+
   const headerHeight = useBreakpointValue({ base: "230px", md: "130px" });
   const iframeMinHeight = useBreakpointValue({
     base: "calc(100vh - 230px)",
@@ -86,7 +94,7 @@ export default function RouteComponent() {
     eventType: hash ? "contentUpload" : null, // remove those without hash (no new content)
   }));
 
-  const mergedData = [...data, ...snapshotsData];
+  const mergedData = [...data || [], ...snapshotsData];
 
   mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
 
@@ -97,25 +105,7 @@ export default function RouteComponent() {
   };
 
   useEffect(() => {
-    if (_url) {
-      (async () => {
-        // Get resolver id
-        await getResolverIds(_url).then((result: string[]) => {
-          setResolverIds(result);
-          if (!result) {
-            setLoading(false);
-          }
-        });
-        await retrieveData(_url).then((result) => {
-          setData(result);
-          setTimelineLoader(false);
-        });
-      })();
-    }
-  }, [_url]);
-
-  useEffect(() => {
-    if (_url && resolverIds.length > 0) {
+    if (_url && resolverIds) {
       (async () => {
         // Get content
         await getContentHashes(resolverIds).then((result) => {
@@ -129,21 +119,21 @@ export default function RouteComponent() {
     }
   }, [_url, resolverIds]);
 
-  if (!resolverIds.length && loading) {
+  if (!resolverIds && loading) {
     return (
       <>
         <LoadingContentComponent />
       </>
     );
   }
-  if (!resolverIds.length && !loading) {
+  if (!resolverIds && !loading) {
     return (
       <>
         <DomainUnavailableComponent />
       </>
     );
   }
-  if (resolverIds.length && snapshots.length === 0 && !loading) {
+  if (resolverIds && snapshots.length === 0 && !loading) {
     return (
       <>
         <ContentUnavailableComponent />
