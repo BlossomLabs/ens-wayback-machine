@@ -59,10 +59,9 @@ export const getContentHashes = async (resolverIds: string[]) => {
           }),
         );
 
-        return {
-          decodedWithDate: decodedWithDate,
-          url: decodedWithDate[decodedHashes.length - 1].hash,
-        };
+        return [
+          ...decodedWithDate
+        ];
       }
       return null;
     },

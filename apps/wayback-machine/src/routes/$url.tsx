@@ -64,10 +64,7 @@ function Header({ timeline }: { timeline: React.ReactElement | false }) {
 }
 
 export default function RouteComponent() {
-  const [snapshots, setSnapshots] = useState<{ hash: string; date: number }[]>(
-    [],
-  );
-  const [loading, setLoading] = useState(true);
+
   const [url, setUrl] = useState("");
   const { url: _url } = useParams({ from: Route.id });
 
@@ -81,20 +78,31 @@ export default function RouteComponent() {
     queryFn: () => retrieveData(_url),
   });
 
+  const { data: snapshots, isLoading: isLoadingSnapshots } = useQuery({
+    queryKey: ["snapshots", _url],
+    queryFn: () =>
+      getContentHashes(resolverIds).then((result) =>
+        result.map(({ date, hash }: { date: number; hash: string }) => ({
+          date: new Date(date * 1000),
+          urlValue: hash,
+          eventType: hash ? "contentUpload" : null, // remove those without hash (no new content)
+        })),
+      ),
+  });
+
+  useEffect(() => {
+    if (snapshots) {
+      setUrl(snapshots[snapshots.length - 1].urlValue);
+    }
+  }, [snapshots]);
+
   const headerHeight = useBreakpointValue({ base: "230px", md: "130px" });
   const iframeMinHeight = useBreakpointValue({
     base: "calc(100vh - 230px)",
     md: "calc(100vh - 130px)",
   });
 
-  // Process snapshots data
-  const snapshotsData: any[] = snapshots.map(({ date, hash }) => ({
-    date: new Date(date * 1000),
-    urlValue: hash,
-    eventType: hash ? "contentUpload" : null, // remove those without hash (no new content)
-  }));
-
-  const mergedData = [...data || [], ...snapshotsData];
+  const mergedData = [...data || [], ...snapshots || []];
 
   mergedData.sort((a, b) => a.date.getTime() - b.date.getTime());
 
@@ -104,43 +112,28 @@ export default function RouteComponent() {
     setUrl(urlValue);
   };
 
-  useEffect(() => {
-    if (_url && resolverIds) {
-      (async () => {
-        // Get content
-        await getContentHashes(resolverIds).then((result) => {
-          if (result) {
-            setSnapshots(result.decodedWithDate);
-            setUrl(result.url);
-          }
-          setLoading(false);
-        });
-      })();
-    }
-  }, [_url, resolverIds]);
-
-  if (!resolverIds && loading) {
+  if (!resolverIds && isLoadingSnapshots) {
     return (
       <>
         <LoadingContentComponent />
       </>
     );
   }
-  if (!resolverIds && !loading) {
+  if (!resolverIds && !isLoadingSnapshots) {
     return (
       <>
         <DomainUnavailableComponent />
       </>
     );
   }
-  if (resolverIds && snapshots.length === 0 && !loading) {
+  if (resolverIds && snapshots?.length === 0 && !isLoadingSnapshots) {
     return (
       <>
         <ContentUnavailableComponent />
       </>
     );
   }
-  if (snapshots.length > 0) {
+  if (snapshots?.length > 0) {
     return (
       <Box bg="primary.100">
         <Box
