@@ -1,14 +1,9 @@
 import {
   Box,
-  Flex,
-  Image,
-  Spinner,
-  Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Link, useParams } from "@tanstack/react-router";
-import type * as React from "react";
+import { useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import Timeline from "@/components/Timeline";
@@ -21,47 +16,11 @@ import ContentUnavailableComponent from "@/components/ContentUnavailable";
 import DomainUnavailableComponent from "@/components/DomainUnavailable";
 import LoadingContentComponent from "@/components/LoadingContent";
 import { useQuery } from "@tanstack/react-query";
+import SidebarLayout from "@/components/Sidebar";
 
 export const Route = createFileRoute("/$url")({
   component: RouteComponent,
 });
-
-function Header({ timeline }: { timeline: React.ReactElement | false }) {
-  return (
-    <Flex
-      px="30px"
-      pt="15px"
-      alignItems="center"
-      direction={["column", "column", "row"]}
-    >
-      <Box minWidth="120px">
-        <Link to="/">
-          <Box mb={5}>
-            <Image
-              alt="Logo"
-              src="/header-logo.svg"
-              width="120px"
-              height="100px"
-              fit="contain"
-            />
-          </Box>
-        </Link>
-      </Box>
-      <Box width="100%">
-        {!timeline ? (
-          <Flex justifyContent="center" alignItems="center">
-            <Text fontSize="xl" marginX="2">
-              Loading timeline...
-            </Text>
-            <Spinner size="lg" marginX="2" />
-          </Flex>
-        ) : (
-          timeline
-        )}
-      </Box>
-    </Flex>
-  );
-}
 
 export default function RouteComponent() {
 
@@ -73,7 +32,7 @@ export default function RouteComponent() {
     queryFn: () => getResolverIds(_url),
   });
 
-  const { data: data, isLoading: timelineLoader } = useQuery({
+  const { data: data, isLoading: timelineIsLoading } = useQuery({
     queryKey: ["data", _url],
     queryFn: () => retrieveData(_url),
   });
@@ -96,10 +55,9 @@ export default function RouteComponent() {
     }
   }, [snapshots]);
 
-  const headerHeight = useBreakpointValue({ base: "230px", md: "130px" });
   const iframeMinHeight = useBreakpointValue({
-    base: "calc(100vh - 230px)",
-    md: "calc(100vh - 130px)",
+    base: "calc(100vh - 85px)",
+    md: "calc(100vh - 30px)",
   });
 
   const mergedData = [...data || [], ...snapshots || []];
@@ -135,26 +93,15 @@ export default function RouteComponent() {
   }
   if (snapshots?.length > 0) {
     return (
-      <Box bg="primary.100">
-        <Box
-          minHeight={headerHeight}
-          maxHeight={headerHeight}
-          overflow="hidden"
-          bg="primary.100"
-        >
-          <Header
-            timeline={
-              !timelineLoader && (
-                <Timeline
-                  data={timelineData}
-                  onItemSelected={handleSnapshotChange}
-                  activeItem={url}
-                />
-              )
-            }
-          />
-        </Box>
-        <Box flex="1" width="100%">
+      <SidebarLayout sidebarContent={
+        timelineIsLoading ? <div style={{ textAlign: "center", width: "100%" }}>Loading...</div> :
+        <Timeline
+          data={timelineData}
+          onItemSelected={handleSnapshotChange}
+          activeItem={url}
+        />
+      }>
+        <Box flex="1" width="100%" bg="white">
           <iframe
             title="Wayback Machine"
             width="100%"
@@ -163,7 +110,7 @@ export default function RouteComponent() {
             src={url ? url : ""}
           />
         </Box>
-      </Box>
+      </SidebarLayout>
     );
   }
   return <LoadingContentComponent />;

@@ -2,6 +2,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { Box, Link, Text } from "@chakra-ui/react";
 import React from "react";
 import { LuExternalLink } from "react-icons/lu";
+import { DialogRoot, DialogBackdrop, DialogTrigger, DialogContent, DialogCloseTrigger, DialogHeader, DialogTitle, DialogBody, DialogFooter } from "./ui/dialog";
 
 type DialogBodyDataProps = {
   selectedItem: DialogData | null;
@@ -172,3 +173,37 @@ export const DialogBodyData = ({ selectedItem }: DialogBodyDataProps) => {
   }
   return null;
 };
+
+type DialogProps = {
+  open: boolean;
+  onClose: () => void;
+  selectedItem: DialogData | null;
+};
+
+export default function Dialog({ open, onClose, selectedItem }: DialogProps) {
+  return (
+    <DialogRoot open={open} onOpenChange={onClose} size="sm">
+    <DialogBackdrop />
+    <DialogTrigger />
+    <DialogContent>
+      <DialogCloseTrigger _hover={{ bg: "transparent" }} />
+      <DialogHeader>
+        <DialogTitle>
+          {selectedItem?.eventType === "transfer" && "Transfer"}
+          {selectedItem?.eventType === "wrappedTransfer" &&
+            "Wrapped transfer"}
+          {selectedItem?.eventType === "domainRegistration" &&
+            "Domain registered"}
+          {selectedItem?.eventType === "domainRenewal" && "Domain renewed"}
+          {selectedItem?.eventType === "domainExpiration" &&
+            "Domain expired"}
+        </DialogTitle>
+      </DialogHeader>
+      <DialogBody>
+        <DialogBodyData selectedItem={selectedItem} />
+      </DialogBody>
+      <DialogFooter />
+    </DialogContent>
+  </DialogRoot>
+  )
+}

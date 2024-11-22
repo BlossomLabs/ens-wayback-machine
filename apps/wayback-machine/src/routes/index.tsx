@@ -9,12 +9,12 @@ import {
   HStack,
   Heading,
   Input,
-  Link,
   Text,
 } from "@chakra-ui/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React, { type FormEventHandler, useState, useEffect } from "react";
 import { LuSearch } from "react-icons/lu";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -102,8 +102,7 @@ export default function HomeComponent() {
                 >
                   <Text textAlign="center" fontSize={20}>
                     <Link
-                      href={`/#/${item}`}
-                      _hover={{ textDecoration: "none" }}
+                      to={`/${item}`}
                     >
                       <HStack spaceX={2}>
                         <Favicon src={`https://${item}.limo/favicon.ico`} />
